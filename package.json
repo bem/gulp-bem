@@ -4,6 +4,8 @@
   "description": "bemhtml templates compiler",
   "main": "index.js",
   "scripts": {
+    "fetch-bemhtml": "mkdir -p syntax; curl https://raw.githubusercontent.com/bem/bem-core/v2/common.blocks/i-bem/i-bem.bemhtml -o syntax/i-bem.bemhtml",
+    "postinstall": "npm run fetch-bemhtml",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
