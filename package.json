@@ -27,7 +27,6 @@
   },
   "scripts": {
     "fetch-bemhtml": "mkdir -p syntax; curl https://raw.githubusercontent.com/bem/bem-core/v2/common.blocks/i-bem/i-bem.bemhtml -o syntax/i-bem.bemhtml",
-    "postinstall": "npm run fetch-bemhtml",
     "test": "mocha --bail --colors --reporter spec --ui bdd test"
   },
   "dependencies": {
