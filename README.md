@@ -1,6 +1,6 @@
 # gulp-bemhtml
 
-> Compile bemhtml templates into JavaScript
+> Compile [bemhtml](http://en.bem.info/technology/bemhtml/v2/reference/) templates into JavaScript
 
 
 ## Install
@@ -24,5 +24,14 @@ gulp.task('default', function () {
 ```
 
 ```sh
-$ node -p "require('./page.bemhtml.js').apply({block: 'page'});"
+$ node -p "require('./dist/page.bemhtml.js').BEMHTML.apply({block: 'page'});"
 ```
+
+
+## API
+
+### plugin options
+
+* *Boolean* **cache** &mdash; caching. Perhaps in the production mode. Default &mdash; `false`.
+* *Boolean* **devMode** &mdash; development mode. Default &mdash; `true`.
+* *String* **exportName** &mdash; bemhtml handler's variable name. Default &mdash; `BEMHTML`.
