@@ -9,7 +9,7 @@ var through = require('through2');
 var PluginError = gutil.PluginError;
 
 var pluginName = path.basename(__dirname);
-var syntaxPath = path.resolve('./syntax/i-bem.bemhtml');
+var syntaxPath = path.join(__dirname, './syntax/i-bem.bemhtml');
 
 /**
  * bemhtml templates compiler.
