@@ -13,12 +13,12 @@ var syntaxPath = path.resolve('./syntax/i-bem.bemhtml');
 
 /**
  * bemhtml templates compiler.
+ *
  * @param {object} options
  * @param {boolean} options.cache
+ * @param {boolean} options.devMode
  * @param {string} options.exportName
- * @param {boolean} options.no-opt
- * @param {boolean} options.optimize
- * @param {boolean} options.wrap
+ * @param {object} options.modulesDeps
  * @return {stream}
  */
 module.exports = function (options) {
@@ -30,6 +30,15 @@ module.exports = function (options) {
     if (file.isStream()) {
       return callback(new PluginError(pluginName, 'Streaming not supported'));
     }
+
+    options = options || {};
+    options = {
+      cache: !options.devMode && options.cache,
+      exportName: options.exportName,
+      modulesDeps: options.modulesDeps,
+      optimize: !options.devMode,
+      wrap: true
+    };
 
     fs.readFile(syntaxPath, {encoding: 'utf8'}, function (err, syntax) {
       if (err) {
@@ -52,7 +61,7 @@ module.exports = function (options) {
         }));
       }
 
-      file.contents = code;
+      file.contents = new Buffer(code);
       file.path = gutil.replaceExtension(file.path, '.bemhtml.js');
 
       callback(null, file);
