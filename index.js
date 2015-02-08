@@ -9,14 +9,19 @@ var through = require('through2');
 var PluginError = gutil.PluginError;
 
 var pluginName = path.basename(__dirname);
+var syntaxPath = path.resolve('./syntax/i-bem.bemhtml');
 
 /**
  * bemhtml templates compiler.
+ * @param {object} options
+ * @param {boolean} options.cache
+ * @param {string} options.exportName
+ * @param {boolean} options.no-opt
+ * @param {boolean} options.optimize
+ * @param {boolean} options.wrap
  * @return {stream}
  */
 module.exports = function (options) {
-  var syntax = fs.readFileSync(path.resolve('./syntax/i-bem.bemhtml'), {encoding: 'utf8'});
-
   return through.obj(function (file, encoding, callback) {
     if (file.isNull()) {
       return callback(null, file);
@@ -26,19 +31,31 @@ module.exports = function (options) {
       return callback(new PluginError(pluginName, 'Streaming not supported'));
     }
 
-    var bemhtml;
+    fs.readFile(syntaxPath, {encoding: 'utf8'}, function (err, syntax) {
+      if (err) {
+        return callback(new PluginError(pluginName, 'Syntax file not found', {
+          fileName: syntaxPath
+        }));
+      }
 
-    try {
-      bemhtml = bemxjst.generate(syntax + file.contents.toString(), options);
-    } catch (err) {
-      return callback(new PluginError(pluginName, err, {
-        fileName: file.path
-      }));
-    }
+      var code;
 
-    file.contents = new Buffer(bemhtml);
-    file.path = gutil.replaceExtension(file.path, '.bemhtml.js');
+      try {
+        code = bemxjst.generate(syntax + file.contents.toString(), options);
+      } catch (e) {
+        err = e;
+      }
 
-    callback(null, file);
+      if (err) {
+        return callback(new PluginError(pluginName, err, {
+          fileName: file.path
+        }));
+      }
+
+      file.contents = code;
+      file.path = gutil.replaceExtension(file.path, '.bemhtml.js');
+
+      callback(null, file);
+    });
   });
 };
