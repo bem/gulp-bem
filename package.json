@@ -6,7 +6,7 @@
   "scripts": {
     "fetch-bemhtml": "mkdir -p syntax; curl https://raw.githubusercontent.com/bem/bem-core/v2/common.blocks/i-bem/i-bem.bemhtml -o syntax/i-bem.bemhtml",
     "postinstall": "npm run fetch-bemhtml",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --bail --colors --reporter spec --ui bdd test"
   },
   "repository": {
     "type": "git",
@@ -25,5 +25,9 @@
     "bem-xjst": "^1.0.0",
     "gulp-util": "^3.0.3",
     "through2": "^0.6.3"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^2.1.0"
   }
 }
