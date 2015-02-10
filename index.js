@@ -1,6 +1,7 @@
 'use strict';
 
 var bemxjst = require('bem-xjst');
+var error = require('./error');
 var fs = require('fs');
 var gutil = require('gulp-util');
 var path = require('path');
@@ -47,12 +48,13 @@ module.exports = function (options) {
         }));
       }
 
-      var code;
+      var bemhtml;
+      var code = file.contents.toString();
 
       try {
-        code = bemxjst.generate(syntax + file.contents.toString(), options);
+        bemhtml = bemxjst.generate(syntax + code, options);
       } catch (e) {
-        err = e;
+        err = error(e, syntax, code);
       }
 
       if (err) {
@@ -61,7 +63,7 @@ module.exports = function (options) {
         }));
       }
 
-      file.contents = new Buffer(code);
+      file.contents = new Buffer(bemhtml);
       file.path = gutil.replaceExtension(file.path, '.bemhtml.js');
 
       callback(null, file);
