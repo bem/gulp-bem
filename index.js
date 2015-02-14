@@ -43,7 +43,7 @@ module.exports = function (options) {
 
     fs.readFile(syntaxPath, {encoding: 'utf8'}, function (err, syntax) {
       if (err) {
-        return callback(new PluginError(pluginName, 'Syntax file not found', {
+        return callback(new PluginError(pluginName, err.code + ', Failed to open file with bemhtml syntax', {
           fileName: syntaxPath
         }));
       }
@@ -54,13 +54,13 @@ module.exports = function (options) {
       try {
         bemhtml = bemxjst.generate(syntax + code, options);
       } catch (e) {
-        err = error(e, syntax, code);
+        err = new PluginError(pluginName, error(e, syntax, code), {
+          fileName: file.path
+        });
       }
 
       if (err) {
-        return callback(new PluginError(pluginName, err, {
-          fileName: file.path
-        }));
+        return callback(err);
       }
 
       file.contents = new Buffer(bemhtml);
