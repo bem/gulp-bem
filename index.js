@@ -1,7 +1,7 @@
 'use strict';
 
 var bemxjst = require('bem-xjst');
-var error = require('./error');
+var formatError = require('./error');
 var fs = require('fs');
 var gutil = require('gulp-util');
 var path = require('path');
@@ -54,7 +54,7 @@ module.exports = function (options) {
       try {
         bemhtml = bemxjst.generate(syntax + code, options);
       } catch (e) {
-        err = new PluginError(pluginName, error(e, syntax, code), {
+        err = new PluginError(pluginName, formatError(e, syntax, code, file.path), {
           fileName: file.path
         });
       }
