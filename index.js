@@ -1,7 +1,7 @@
 'use strict';
 
 var bemxjst = require('bem-xjst');
-var error = require('./error');
+var formatError = require('./error');
 var fs = require('fs');
 var gutil = require('gulp-util');
 var path = require('path');
@@ -43,7 +43,7 @@ module.exports = function (options) {
 
     fs.readFile(syntaxPath, {encoding: 'utf8'}, function (err, syntax) {
       if (err) {
-        return callback(new PluginError(pluginName, 'Syntax file not found', {
+        return callback(new PluginError(pluginName, err.code + ', Failed to open file with bemhtml syntax', {
           fileName: syntaxPath
         }));
       }
@@ -54,13 +54,13 @@ module.exports = function (options) {
       try {
         bemhtml = bemxjst.generate(syntax + code, options);
       } catch (e) {
-        err = error(e, syntax, code);
+        err = new PluginError(pluginName, formatError(e, syntax, code, file.path), {
+          fileName: file.path
+        });
       }
 
       if (err) {
-        return callback(new PluginError(pluginName, err, {
-          fileName: file.path
-        }));
+        return callback(err);
       }
 
       file.contents = new Buffer(bemhtml);
