@@ -42,7 +42,7 @@ var bundle = project.bundle({
 });
 
 gulp.task('css', function () {
-    bundle.src({tech: 'css', extensions: ['.css', '.styl']})
+    return bundle.src({tech: 'css', extensions: ['.css', '.styl']})
         .pipe(stylus())            
         .pipe(postcss([
             postcssUrl({ url: 'inline' })            
@@ -52,7 +52,7 @@ gulp.task('css', function () {
 });
 
 gulp.task('js', function () {
-    merge(
+    return merge(
         gulp.src(require.resolve('ym')),
         bundle.src({ tech: 'js', extensions: ['.js', '.vanilla.js', '.browser.js'] })
     )
@@ -61,7 +61,7 @@ gulp.task('js', function () {
 });
 
 gulp.task('bemhtml', function () {
-    bundle.src({ tech: 'bemhtml.js', extensions: ['.bemhtml.js', '.bemhtml'] })
+    return bundle.src({ tech: 'bemhtml.js', extensions: ['.bemhtml.js', '.bemhtml'] })
         .pipe(concat(`${bundle.name()}.bemhtml.js`))            
         .pipe(bemhtml())
         .pipe(gulp.dest('desktop.bundles/index'));
