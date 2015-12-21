@@ -1,42 +1,60 @@
 # gulp-bem
 
+Usage
+-----
+
 ```js
 import gulp from 'gulp';
-import gBem from 'gulp-bem';
-import gConcat from 'gulp-concat';
-import gMerge from 'gulp-merge';
+import bem from 'gulp-bem';
+import concat from 'gulp-concat';
+import merge from 'gulp-merge';
+import bemhtml from 'gulp-bemhtml';
+import stylus from 'gulp-stylus';
+import postcss from 'gulp-postcss';
+import postcssUrl from 'postcss-url';
 
-let bem = new gBem({
-    levels: {
-        'lib/bem-core/common.blocks': { scheme: 'nested' },
-        'lib/bem-core/desktop.blocks': { scheme: 'nested' },
-        'common.blocks': { scheme: 'flat' },
-        'desktop.blocks': { scheme: 'flat' }
+// Создаём хелпер для сборки проекта
+var project = bem({
+    bemconfig: {
+        'libs/bem-core/common.blocks': { scheme: 'nested' },
+        'libs/bem-core/desktop.blocks': { scheme: 'nested' },
+        'libs/bem-components/common.blocks': { scheme: 'nested' },
+        'libs/bem-components/desktop.blocks': { scheme: 'nested' },
+        'libs/bem-components/design/common.blocks': { scheme: 'nested' },
+        'libs/bem-components/design/desktop.blocks': { scheme: 'nested' },
+        'common.blocks': { scheme: 'nested' },
+        'desktop.blocks': { scheme: 'nested' }
     }
 });
 
-// building one bundle with waiting for completing all substreams
-gulp.task('build', () => {
-    let res = [],
-        name = 'index',
-        bundlePath = tech => `desktop.bundles/index${tech? `/${name}.${tech}` : ''}`,
-        opts = {
-            decl: bundlePath('bemdecl.js')
-        };
-
-    res.push(bem.src(Object.assign({}, opts, {tech: 'css'}))
-        .pipe(gConcat(`${name}.css`)));
-
-    res.push(bem.src(Object.assign({}, opts, {tech: 'js'}))
-        .pipe(gConcat(`${name}.js`)));
-
-    res.push(bem.src(Object.assign({}, opts, {tech: 'bemhtml.js'}))
-        .pipe(gConcat(''))
-        .pipe(apply(gulp.src(bundlePath('bemjson.js'))))
-        .pipe(gRename(`${name}.html`)));
-
-    return gMerge.apply(null, res)
-        .pipe(gulp.dest(bundlePath()));
+// Создаём хелпер для сборки бандла
+var bundle = project.bundle({
+    path: 'desktop.bundles/index',
+    declPath: 'index.bemdecl.js'
 });
 
+gulp.task('css', function () {
+    bundle.src({tech: 'css', extensions: ['.css', '.styl']})
+        .pipe(stylus())            
+        .pipe(postcss([
+            postcssUrl({ url: 'inline' })            
+        ]))
+        .pipe(concat(`${bundle.name()}.css`));
+});
+
+gulp.task('js', function () {
+    merge(
+        gulp.src(require.resolve('ym')),
+        bundle.src({ tech: 'js', extensions: ['.js', '.vanilla.js', '.browser.js'] })
+    ).pipe(concat(`${bundle.name()}.js`)),
+});
+
+gulp.task('bemhtml', function () {
+    bundle.src({ tech: 'bemhtml.js', extensions: ['.bemhtml.js', '.bemhtml'] })
+        .pipe(concat(`${bundle.name()}.bemhtml.js`))            
+        .pipe(bemhtml());
+});
+
+gulp.task('build', gulp.series('css', 'js', 'bemhtml'));
+gulp.task('default', gulp.series('build'));   
 ```
