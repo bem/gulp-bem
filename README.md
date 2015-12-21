@@ -1,11 +1,19 @@
-# gulp-bem
+@bem/gulp
+=========
+
+Install
+-------
+
+```
+$ npm install @bem/gulp --save-dev
+```
 
 Usage
 -----
 
 ```js
 import gulp from 'gulp';
-import bem from 'gulp-bem';
+import bem from '@bem/gulp';
 import concat from 'gulp-concat';
 import merge from 'gulp-merge';
 import bemhtml from 'gulp-bemhtml';
