@@ -19,7 +19,9 @@
   "bugs": {
     "url": "https://github.com/gulp-bem/gulp-bem/issues"
   },
-  "engines": { "node": ">= 4.0" },
+  "engines": {
+    "node": ">= 4.0"
+  },
   "homepage": "https://github.com/gulp-bem/gulp-bem#readme",
   "dependencies": {
     "@bem/deps": "^0.0.10",
@@ -27,9 +29,11 @@
     "bemjson-to-decl": "0.0.1",
     "enb-require-or-eval": "^1.0.2",
     "gulp-clone": "^1.0.0",
+    "sort-stream2": "^1.0.0",
     "stream-to-array": "^2.2.0",
     "through2": "^2.0.0",
-    "vinyl": "^1.1.0"
+    "vinyl": "^1.1.0",
+    "vinyl-fs": "^2.3.1"
   },
   "devDependencies": {
     "gulp": "git://github.com/gulpjs/gulp.git#4.0",
