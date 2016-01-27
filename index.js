@@ -13,7 +13,7 @@ var toArray = require('stream-to-array');
 var vfs = require('vinyl-fs');
 var File = require('vinyl');
 
-var bemjsonToBemEntity = require('./bemjson2bemdecl');
+var bemjsonToBemEntity = require('./bemjson2bemEntity');
 var bemdeclToBemEntity = require('./bemdecl2bemEntity');
 
 //var DUMP = through.obj(function(file, enc, cb) {
@@ -98,7 +98,6 @@ function BEMBundle(opts) {
     this._levels = opts.levels;
     this._project = opts.project;
 
-    debugger;
     var declStream = vfs.src(this._decl);
 
     if (this._decl.endsWith('.bemjson.js')) {
@@ -112,15 +111,13 @@ function BEMBundle(opts) {
 }
 
 BEMBundle.prototype.entities = function() {
-    return this._entities
+    return this._entities;
 };
 
 BEMBundle.prototype.src = function(opts) {
     if (!opts.tech) throw new Error('Prokin` tech');
 
-    var bundle = this;
     var extensions = opts.extensions || [opts.tech];
-    opts = Object.assign({}, {levels: this._levels}, opts);
 
     var entities = toArray(this._entities);
     var deps = toArray(this._deps);
@@ -134,7 +131,6 @@ BEMBundle.prototype.src = function(opts) {
       introspection
     ])
     .then(function(res) {
-        debugger;
         var deps = bemDeps.resolve(res[0], res[1]);
 
         filterDeps(deps.entities, res[2], extensions, function(err, sourceFiles) {

@@ -1,22 +1,9 @@
 var through = require('through2'),
-    vm = require('vm'),
+    _eval = require('./evalContent'),
     normalize = require('bem-decl').normalize;
 
-module.exports = function(opts) {
-    function _eval(content) {
-        var sandbox = {}
-        var exports = {}
-
-        sandbox.exports = exports
-        sandbox.module = { exports: exports }
-        sandbox.global = sandbox
-
-        var script = new vm.Script(content);
-        return script.runInNewContext(sandbox);
-    }
-
+module.exports = function() {
     return through.obj(function(file, enc, next) {
-        debugger;
         var fileContent = file.contents.toString(enc);
         var bemDecl = _eval(fileContent);
         var entities = normalize(bemDecl);
