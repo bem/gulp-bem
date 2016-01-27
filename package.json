@@ -19,6 +19,7 @@
   "bugs": {
     "url": "https://github.com/gulp-bem/gulp-bem/issues"
   },
+  "engines": { "node": ">= 4.0" },
   "homepage": "https://github.com/gulp-bem/gulp-bem#readme",
   "dependencies": {
     "@bem/deps": "^0.0.10",
