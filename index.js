@@ -1,7 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 
-//var gulp = require('gulp');
 //var clone = require('gulp-clone');
 
 var through = require('through2');
@@ -103,11 +102,16 @@ function BEMBundle(opts) {
     if (this._decl.endsWith('.bemjson.js')) {
         this._entities  = declStream.pipe(bemjsonToBemEntity());
     } else {
-        this._entities  = declStream.pipe(bemdeclToBemEntity());
+        this._entities = declStream.pipe(bemdeclToBemEntity());
     }
 
     //TODO: take it from introspect
     this._deps = bemDeps.load({levels: this._levels});
+
+    //TODO: how to clone this streams?
+    this._entities = toArray(this._entities);
+    this._deps = toArray(this._deps);
+    this._introspection = toArray(this._project.introspection);
 }
 
 BEMBundle.prototype.entities = function() {
@@ -118,17 +122,12 @@ BEMBundle.prototype.src = function(opts) {
     if (!opts.tech) throw new Error('Prokin` tech');
 
     var extensions = opts.extensions || [opts.tech];
-
-    var entities = toArray(this._entities);
-    var deps = toArray(this._deps);
-    var introspection = toArray(this._project.introspection);
-
     var stream = through.obj();
 
     Promise.all([
-      entities,
-      deps,
-      introspection
+      this.entities(),
+      this._deps,
+      this._introspection
     ])
     .then(function(res) {
         var deps = bemDeps.resolve(res[0], res[1]);
@@ -139,14 +138,12 @@ BEMBundle.prototype.src = function(opts) {
                 return stream.push(null);
             }
 
-            sourceFiles
-                .forEach(function(p) {
-                    var file = new File({path: p.path});
-                    // file.contents = fs.createReadStream(p.path);
-                    file.contents = fs.readFileSync(p.path);
-                    stream.push(file);
-                });
-
+            sourceFiles.forEach(function(source) {
+                var file = new File({path: source.path});
+                // TODO: Think about async read
+                file.contents = fs.readFileSync(file.path);
+                stream.push(file);
+            });
             stream.push(null);
         });
     })
@@ -158,12 +155,13 @@ BEMBundle.prototype.src = function(opts) {
     return stream;
 };
 
-BEMBundle.prototype.commentWrapper = function() {
+BEMBundle.prototype.comment = function() {
     var bundlePath = this._path;
     return through.obj(function(file, enc, cb) {
-        var filePath = path.relative(bundlePath, file.path);
-        var commentsBegin = '/* ' + filePath + ': begin */ /**/\n';
-        var commentsEnd = '\n/* ' + filePath + ': end */ /**/\n';
+        var filePath = path.relative(bundlePath, file.path),
+            commentsBegin = '/* ' + filePath + ': begin */ /**/\n',
+            commentsEnd = '\n/* ' + filePath + ': end */ /**/\n';
+
         file.contents = Buffer.concat([new Buffer(commentsBegin),
                 file.contents,
                 new Buffer(commentsEnd)])
@@ -173,6 +171,10 @@ BEMBundle.prototype.commentWrapper = function() {
 
 BEMBundle.prototype.name = function () {
     return this._name;
+};
+
+BEMBundle.prototype.path = function () {
+    return this._path;
 };
 
 module.exports = function (opts) {
