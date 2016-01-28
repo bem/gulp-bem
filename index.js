@@ -138,13 +138,27 @@ BEMBundle.prototype.src = function(opts) {
                 return stream.push(null);
             }
 
-            sourceFiles.forEach(function(source) {
+            var que = {};
+            var length = sourceFiles.length;
+            // push files to stream in same order they come
+            function pushFilesFromQue() {
+                for (var j = 0; j <= length; j++) {
+                    var file = que[j];
+                    if (!file) { continue; }
+                    if (!file.contents) { break; }
+                    stream.push(file);
+                    que[j] = undefined;
+                }
+                if (j > length) { stream.push(null); }
+            }
+            sourceFiles.forEach(function(source, i) {
                 var file = new File({path: source.path});
-                // TODO: Think about async read
-                file.contents = fs.readFileSync(file.path);
-                stream.push(file);
+                que[i] = file;
+                fs.readFile(source.path, function(err, content) {
+                    file.contents = content;
+                    pushFilesFromQue(sourceFiles.length);
+                });
             });
-            stream.push(null);
         });
     })
     .catch(function(err) {
