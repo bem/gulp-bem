@@ -1,8 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 
-//var clone = require('gulp-clone');
-
 var through = require('through2');
 var sort = require('sort-stream2')
 
@@ -35,6 +33,16 @@ function BEMProject(opts) {
 
 BEMProject.prototype.bundle = function (opts) {
     opts || (opts = {});
+
+    // if (opts.levels && (
+    //     opts.levels.length !== this.levels.length ||
+    //     opts.levels !== this.levels // <----------- TODO <----------
+    // )) {
+    //     opts.introspection = this.introspection.then(function(levels) {
+    //         // filtrrrrr <----------- TODO <------------
+    //         return levels;
+    //     });
+    // } else {
 
     // TODO: Levels of bundle are subset of project levels 
 
@@ -100,7 +108,8 @@ function BEMBundle(opts) {
     var declStream = vfs.src(this._decl);
 
     if (this._decl.endsWith('.bemjson.js')) {
-        this._entities  = declStream.pipe(bemjsonToBemEntity());
+        this._entities = declStream.pipe(bemjsonToBemEntity());
+        this._bemjson = this._entities.pipe(through.obj());
     } else {
         this._entities = declStream.pipe(bemdeclToBemEntity());
     }
@@ -115,11 +124,15 @@ function BEMBundle(opts) {
 }
 
 BEMBundle.prototype.entities = function() {
-    return this._entities;
+    return this._entities.pipe(through.obj());
+};
+
+BEMBundle.prototype.bemjson = function() {
+    return this._bemjson.pipe(through.obj());
 };
 
 BEMBundle.prototype.src = function(opts) {
-    if (!opts.tech) throw new Error('Prokin` tech');
+    if (!opts.tech) throw new Error('Tech is required');
 
     var extensions = opts.extensions || [opts.tech];
     var stream = through.obj();
@@ -168,20 +181,6 @@ BEMBundle.prototype.src = function(opts) {
 
     return stream;
 };
-
-BEMBundle.prototype.comment = function() {
-    var bundlePath = this._path;
-    return through.obj(function(file, enc, cb) {
-        var filePath = path.relative(bundlePath, file.path),
-            commentsBegin = '/* ' + filePath + ': begin */ /**/\n',
-            commentsEnd = '\n/* ' + filePath + ': end */ /**/\n';
-
-        file.contents = Buffer.concat([new Buffer(commentsBegin),
-                file.contents,
-                new Buffer(commentsEnd)])
-        cb(null, file);
-    });
-}
 
 BEMBundle.prototype.name = function () {
     return this._name;
