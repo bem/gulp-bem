@@ -109,7 +109,7 @@ function BEMBundle(opts) {
 
     if (this._decl.endsWith('.bemjson.js')) {
         this._entities = declStream.pipe(bemjsonToBemEntity());
-        this._bemjson = this._entities.pipe(through.obj());
+        this._bemjson = declStream.pipe(through.obj());
     } else {
         this._entities = declStream.pipe(bemdeclToBemEntity());
     }
@@ -124,11 +124,13 @@ function BEMBundle(opts) {
 }
 
 BEMBundle.prototype.entities = function() {
-    return this._entities.pipe(through.obj());
+    return this._entities;
 };
 
 BEMBundle.prototype.bemjson = function() {
-    return this._bemjson.pipe(through.obj());
+    return this._bemjson.pipe(through.obj(function(file, enc, cb) {
+        cb(null, file.clone());
+    }));
 };
 
 BEMBundle.prototype.src = function(opts) {
@@ -153,6 +155,7 @@ BEMBundle.prototype.src = function(opts) {
 
             var que = {};
             var length = sourceFiles.length;
+            length || stream.push(null);
             // push files to stream in same order they come
             function pushFilesFromQue() {
                 for (var j = 0; j <= length; j++) {
