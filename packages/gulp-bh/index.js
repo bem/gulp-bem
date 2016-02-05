@@ -1,7 +1,7 @@
 var vm = require('vm');
 var through = require('through2');
 var BH = require('bh').BH;
-var File = require('vinyl');
+var path = require('path');
 
 
 module.exports = function(opt) {
@@ -17,8 +17,7 @@ module.exports = function(opt) {
         sandbox.global = sandbox
         sandbox.bh = bh;
 
-        var script = new vm.Script(content);
-        return script.runInNewContext(sandbox);
+        return vm.runInNewContext(content, sandbox);
     }
 
     return {
@@ -34,8 +33,12 @@ module.exports = function(opt) {
             });
         },
         apply: function(filePath) {
-            return through.obj(function(bemJson, enc, next) {
-                var file = new File({path: filePath});
+            return through.obj(function(file, enc, next) {
+                var fileContent = file.contents.toString(enc);
+                if (filePath) {
+                    file.path = path.join(file.base, filePath);
+                }
+                bemJson = evalWithBH(fileContent);
                 file.contents = new Buffer(bh.apply(bemJson));
                 next(null, file);
             });
