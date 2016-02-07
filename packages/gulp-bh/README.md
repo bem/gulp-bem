@@ -1,6 +1,11 @@
+gulp-bh
+=======
 
+Gulp plugin for executing [https://github.com/bem/bh](bh) templates.
+
+```js
 var gulp = require('gulp'),
-    bh = require('../index.js')();
+    bh = require('@bem/gulp-bh')();
 
 gulp.task('default', function() {
     gulp.src('*.bh.js')
@@ -10,3 +15,4 @@ gulp.task('default', function() {
         .pipe(bh.apply('index.html'))
         .pipe(gulp.dest('./bundle'));
 });
+```
