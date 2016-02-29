@@ -14,7 +14,11 @@
     "gulpplugin",
     "bem"
   ],
-  "author": "Alexey Yaroshevich <zxqfox@gmail.com>",
+  "contributors": [
+    "Alexey Yaroshevich <zxqfox@gmail.com>",
+    "Andrew Abramow <andrewblond@yandex.com>",
+    "Vasiliy Loginevskiy <yeti-or@yandex-team.ru>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gulp-bem/gulp-bem/issues"
