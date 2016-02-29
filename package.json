@@ -1,38 +1,38 @@
 {
-  "name": "gulp-bemhtml",
-  "version": "0.0.4",
-  "description": "bemhtml templates compiler",
+  "name": "gulp-bem-xjst",
+  "version": "1.0.0",
+  "description": "bem-xjst templates compiler",
   "keywords": [
     "gulpplugin",
     "bemhtml",
+    "bemtree",
+    "bem-xjst",
     "template",
     "templates",
-    "compile",
-    "bem-xjst",
-    "xjst"
+    "compile"
   ],
-  "homepage": "https://github.com/sullenor/gulp-bemhtml",
+  "homepage": "https://github.com/gulp-bem/gulp-bem-xjst",
   "bugs": {
-    "url": "https://github.com/sullenor/gulp-bemhtml/issues"
+    "url": "https://github.com/gulp-bem/gulp-bem-xjst/issues"
   },
   "license": "MIT",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sullenor/gulp-bemhtml.git"
+    "url": "https://github.com/gulp-bem/gulp-bem-xjst.git"
   },
-  "author": {
-    "name": "Alexey Litvinov",
-    "email": "iamhoneyboy@gmail.com"
-  },
+  "contributors": [
+    "Alexey Litvinov <iamhoneyboy@gmail.com>",
+    "Alexey Yaroshevich <zxqfox@gmail.com>"
+  ],
   "scripts": {
     "fetch-bemhtml": "mkdir -p syntax; curl https://raw.githubusercontent.com/bem/bem-core/v2/common.blocks/i-bem/i-bem.bemhtml -o syntax/i-bem.bemhtml",
     "test": "mocha --bail --colors --reporter spec --ui bdd test"
   },
   "dependencies": {
-    "bem-xjst": "^1.0.0",
-    "gulp-util": "^3.0.3",
-    "through2": "^0.6.3"
+    "bem-xjst": "^5.0.0",
+    "gulp-util": "^3.0.7",
+    "through2": "^2.0.1"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",

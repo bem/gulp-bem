@@ -1,7 +1,7 @@
 describe('gulp-bemhtml', function () {
   'use strict';
 
-  var bemhtml = require('..');
+  var lib = require('..');
   var expect = require('expect.js');
   var gutil = require('gulp-util');
 
@@ -10,7 +10,7 @@ describe('gulp-bemhtml', function () {
     var vinylFile;
 
     before(function (next) {
-      stream = bemhtml();
+      stream = lib.bemhtml();
 
       stream.on('data', function (file) {
         vinylFile = file;
@@ -29,7 +29,7 @@ describe('gulp-bemhtml', function () {
 
     it('outputs bemhtml templates compiler', function () {
       eval(vinylFile.contents.toString());
-      var bemhtml = exports.BEMHTML;
+      var bemhtml = exports;
       expect(bemhtml.apply({block: 'page'})).to.be.equal('<h1 class="page">Hello, world!</h1>');
     });
   });

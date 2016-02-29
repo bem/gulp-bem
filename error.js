@@ -6,26 +6,18 @@ var util = require('util');
 var format = util.format;
 
 /**
- * @param  {object} err
- * @param  {string} syntax
- * @param  {string} code
- * @param  {string} filepath
- * @return {string|object}
+ * @param {Object} err
+ * @param {String} code
+ * @param {String} filepath
+ * @return {String|Object}
  */
-module.exports = function (err, syntax, code, filepath) {
+module.exports = function (err, code, filepath) {
   // Assume that esprima parser failed
   if (err.description && err.column && err.lineNumber) {
-    var syntaxLines = syntax.split('\n').length;
-
-    // Looks like we got corrupted bemhtml syntax file
-    if (syntaxLines > err.lineNumber) {
-      return 'Problems with syntax file';
-    }
-
     var source = code.split('\n');
 
     var addtionalLines = 3;
-    var errorLine = err.lineNumber - syntaxLines; // extra line from length prop
+    var errorLine = err.lineNumber; // extra line from length prop
     var startLine = Math.max(errorLine - addtionalLines, 0);
     var endLine = Math.min(errorLine + addtionalLines, source.length);
 
