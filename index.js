@@ -10,14 +10,12 @@ var toArray = require('stream-to-array');
 var vfs = require('vinyl-fs');
 var File = require('vinyl');
 
-var bemjsonToBemEntity = require('./bemjson2bemEntity');
-var bemdeclToBemEntity = require('./bemdecl2bemEntity');
+var eval = require('gulp-eval');
+var harvest = require('./harvest-entities.js');
 
-//var DUMP = through.obj(function(file, enc, cb) {
-//    debugger;
-//    //console.log(file);
-//    cb(null, file);
-//});
+var bemDeclNormalize = require('bem-decl').normalize;
+var bemjsonToDeclConvert = require('bemjson-to-decl').convert;
+
 
 function BEMProject(opts) {
     this.levelsConfig = opts.bemconfig || {};
@@ -105,19 +103,18 @@ function BEMBundle(opts) {
     this._levels = opts.levels;
     this._project = opts.project;
 
-    var declStream = vfs.src(this._decl);
+    var declStream = vfs.src(this._decl).pipe(eval());
 
     if (this._decl.endsWith('.bemjson.js')) {
-        this._entities = declStream.pipe(bemjsonToBemEntity());
+        this._entities = declStream.pipe(harvest(bemjsonToDeclConvert));
         this._bemjson = declStream.pipe(through.obj());
     } else {
-        this._entities = declStream.pipe(bemdeclToBemEntity());
+        this._entities = declStream.pipe(harvest(bemDeclNormalize));
     }
 
     //TODO: take it from introspect
     this._deps = bemDeps.load({levels: this._levels});
 
-    //TODO: how to clone this streams?
     this._entities = toArray(this._entities);
     this._deps = toArray(this._deps);
     this._introspection = toArray(this._project.introspection);
