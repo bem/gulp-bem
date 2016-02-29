@@ -26,6 +26,9 @@
   "engines": {
     "node": ">= 4.0"
   },
+  "files": [
+    "lib/"
+  ],
   "homepage": "https://github.com/gulp-bem/gulp-bem#readme",
   "dependencies": {
     "@bem/deps": "^0.0.10",
