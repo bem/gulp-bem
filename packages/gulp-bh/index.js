@@ -1,4 +1,4 @@
-var vm = require('vm');
+var eval = require('gulp-eval').eval;
 var through = require('through2');
 var BH = require('bh').BH;
 var path = require('path');
@@ -9,15 +9,7 @@ module.exports = function(opt) {
     opt && bh.setOptions(opt);
 
     function evalWithBH(content, filename) {
-        var sandbox = {}
-        var exports = {}
-
-        sandbox.exports = exports
-        sandbox.module = { exports: exports }
-        sandbox.global = sandbox
-        sandbox.bh = bh;
-
-        return vm.runInNewContext(content, sandbox, {filename: filename});
+        return eval(content, filename, {bh:bh, console: global.console});
     }
 
     return {
@@ -25,8 +17,7 @@ module.exports = function(opt) {
             return through.obj(function(file, enc, next) {
                 var fileContent = file.contents.toString(enc);
                 matcher = evalWithBH(fileContent, file.relative);
-                if (matcher !== bh) {
-                    // module.exports = function(bh)
+                if (matcher !== bh) { // for case `module.exports = function(bh)`
                     matcher(bh);
                 }
                 next(null, file);
