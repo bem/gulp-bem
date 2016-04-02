@@ -1,0 +1,23 @@
+{
+  "name": "gulp-bem-example-bundles",
+  "version": "0.0.1",
+  "description": "Gulp plugin for transforing examples to bundles",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Ilia Isupov <ilia.isupov@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@bem/gulp": "0.0.5",
+    "q": "^1.4.1",
+    "through2": "^2.0.1",
+    "vinyl-fs": "^2.4.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.4.5"
+  }
+}
