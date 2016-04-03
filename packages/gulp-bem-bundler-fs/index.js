@@ -29,6 +29,7 @@ module.exports = function (pattern) {
         return Promise.all(
             dirnames.map(dirname => {
                 var bundle = {
+                    path: dirname,
                     levels: []
                 };
 
