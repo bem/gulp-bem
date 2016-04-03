@@ -2,91 +2,56 @@
 
 const fs = require('fs');
 const path = require('path');
-const q = require('q');
 const through2 = require('through2');
 
-module.exports = function(levels) {
+module.exports = (levels) => {
     levels = levels || [];
 
-    var cache = {};
+    var bundles = {};
+    
+    function getBlockName(vinyl) {
+        return path.basename(vinyl.path).split('.')[0];
+    }
 
-    return through2.obj(function (vinyl, enc, callback) {
-        //collect vinyl files
+    function isBemjsonFile(name) {
+        return name.match(/\.bemjson\.js/);
+    }
+
+    function isNotBemjsonFile(name) {
+        return !isBemjsonFile(name);
+    }
+
+    function resolveAbsolutePath(vinylPath, fileName) {
+        return path.join(vinylPath, fileName);
+    }
+
+    return through2.obj((vinyl, enc, callback) => {
         const blockName = getBlockName(vinyl);
 
-        console.log(vinyl.path);
+        fs.readdir(vinyl.path, (error, entries) => {
+            if(error) {
+                callback(error);
+            }
 
-        readDir(vinyl.path)
-            .then(contents => {
-                return q.all(contents.map(name => {
-                    const filePath = path.join(vinyl.path, name);
-                    return isDir(path.join(vinyl.path, name))
-                        .then(isDir => ({name, path: filePath, isDir}));
-                }))
-            })
-            .then(entries => {
-                const levels = entries
-                    .filter(entry => entry.isDir)
-                    .map(entry => entry.name);
-                const bemjson = entries
-                    .reduce((accumulated, entry) => {
-                        return entry.indexOf('bemjson') !== -1 ? entry : null;
-                    });
+            console.log(vinyl.path);
+            callback(null, vinyl.path);
 
-                // console.log(levels);
-                // console.log(bemjson);
-            })
-            .then((levels) => {
-                callback();
-            })
-            .catch(err => {
-                console.log(err);
-                //TODO error handler
-            })
-            .done();
-
-        // fs.readdir(vinyl.path, (error, contents) => {
-        //     var folders = dir.reduce((entry) => {
-        //         return entry.isDir
-        //     }, []);
-        //
-        //     let key = buildKey();
-        //     if (!cache[key]) {
-        //         cache[blockName] = {};
-        //     } else {
-        //         //???
-        //     }
-
-        //    callback();
+            // const bundle = bundles[blockName] || {bemjson: null, levels};
+            //
+            // bundle.bemjson = entries
+            //     .filter(isBemjsonFile)
+            //     .map(resolveAbsolutePath.bind(null, vinyl.path))[0];
+            //
+            // bundle.levels = bundle.levels.concat(entries
+            //     .filter(isNotBemjsonFile)
+            //     .map(resolveAbsolutePath.bind(null, vinyl.path)));
+            //
+            // bundles[ blockName ] = bundle;
+            // console.log(bundle);
+            // callback(null, bundle);
         });
-};
-
-function getBlockName(vinyl) {
-    return path.basename(vinyl.path).split('.')[0];
-}
-
-function readDir(dirPath) {
-    return q.denodeify(fs.readdir)(dirPath);
-}
-
-function isDir(dirPath) {
-    return q.denodeify(fs.stat)(dirPath)
-        .then(stats => stats.isDirectory());
-}
-
-var foo = {
-    'button1f': {
-        'bemjson': 'path/to/bemjson1',
-        'levels': ['bem-core/common.blocks', 'common.blocks']
-    },
-    'button2': {
-        'bemjson': 'path/to/bemjson2',
-        'levels': ['bem-core/common.blocks', 'common.blocks', 'desktop.blocks']
-    }
-};
-
-var correct = {
-    'button': {
-
-    }
+    }, callback => {
+        console.log('flush');
+        console.log(bundles);
+    });
 };
