@@ -16,20 +16,28 @@ class Converter {
 
     appendExample(example, cb) {
         const blockName = utils.getBlockName(example);
+        const exampleRelativePath = utils.pathRelativeToRoot(example);
 
         utils.readdir(example.path)
             .then(this._groupExampleContents)
             .then(this._bundlesFromGroupedContents.bind(this))
-            .then(this._cacheBundles.bind(this, blockName))
+            .then(this._cacheBundles.bind(this, blockName, exampleRelativePath))
             .done(cb);
     }
 
     getResults() {
         function buildResultEntry(name, entry) {
             const bemjson = entry.bemjson;
+            const vinyl = new Vinyl();
+
+            entry.bemjsonPaths.forEach(p => {
+                vinyl.path = path.join(p, bemjson);
+            });
+
+            vinyl.path = path.join(name, bemjson.split('.')[0]+ '.examples', bemjson);
 
             return {
-                bemjson: new Vinyl({path: path.join(name, bemjson.split('.')[0]+ '-examples', bemjson)}),
+                bemjson: vinyl,
                 levels: _.union(entry.levels, this._levels)
             };
         }
@@ -63,7 +71,7 @@ class Converter {
         return _.find(group, utils.isBemjsonFile);
     }
 
-    _cacheBundles(blockName, bundles) {
+    _cacheBundles(blockName, exampleRelativePath, bundles) {
         const accumulated = this._bundles[blockName] || {};
 
         bundles.forEach(bundle => {
@@ -71,7 +79,9 @@ class Converter {
 
             if (prevBundle) {
                 prevBundle.levels = _.union(prevBundle.levels, bundle.levels);
+                prevBundle.bemjsonPaths.push(exampleRelativePath);
             } else {
+                bundle.bemjsonPaths = [exampleRelativePath];
                 accumulated[bundle.bemjson] = bundle;
             }
 
