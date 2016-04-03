@@ -33,8 +33,8 @@ module.exports = function(levels) {
                         return entry.indexOf('bemjson') !== -1 ? entry : null;
                     });
 
-                console.log(levels);
-                console.log(bemjson);
+                // console.log(levels);
+                // console.log(bemjson);
             })
             .then((levels) => {
                 callback();
