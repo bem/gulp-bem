@@ -4,7 +4,7 @@
   "description": "Gulp plugin for transforing examples to bundles",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [],
   "author": "Ilia Isupov <ilia.isupov@gmail.com>",
@@ -22,6 +22,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "istanbul": "^0.4.2",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "sinon-chai": "^2.8.0"
   }
 }
