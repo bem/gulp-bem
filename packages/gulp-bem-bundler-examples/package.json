@@ -1,5 +1,5 @@
 {
-  "name": "gulp-bem-example-bundles",
+  "name": "gulp-bem-bundler-examples",
   "version": "0.0.1",
   "description": "Gulp plugin for transforing examples to bundles",
   "main": "lib/index.js",
