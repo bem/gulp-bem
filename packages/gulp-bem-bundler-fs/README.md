@@ -28,6 +28,11 @@ Usage
 const bundler = require('gulp-bem-bundler-fs');
 const builder = require('gulp-bem-bundle-builder');
 
+const stylus = require('gulp-stylus');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const postcssUrl = require('postcss-url');
+
 bundler('*.bundles/*')
     .pipe(builder(bundle => ({
         css: {
