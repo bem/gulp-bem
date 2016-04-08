@@ -1,8 +1,6 @@
 'use strict';
 
-const q = require('q');
 const _ = require('lodash');
-const fs = require('fs');
 const path = require('path');
 const Vinyl = require('vinyl');
 const utils = require('./utils');
