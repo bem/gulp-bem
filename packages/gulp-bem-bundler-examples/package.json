@@ -2,15 +2,18 @@
   "name": "gulp-bem-bundler-examples",
   "version": "0.0.1",
   "description": "Gulp plugin for transforing examples to bundles",
-  "main": "lib/index.js",
-  "scripts": {
-    "test": "mocha",
-    "coverage": "istanbul cover _mocha",
-    "lint": "eslint ."
-  },
-  "keywords": [],
+  "keywords": ["gulp", "bem", "examples", "bundler"],
   "author": "Ilia Isupov <ilia.isupov@gmail.com>",
-  "license": "ISC",
+  "maintainers": [
+    "Ilia Isupov <ilia.isupov@gmail.com>",
+    "Andrey Kuznetsov <andrey.kuznetsov48@yandex.ru> (http://github.com/tormozz48)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gulp-bem/gulp-bem-bundler-examples.git"
+  },
+  "main": "lib/index.js",
+  "license": "MIT",
   "dependencies": {
     "@bem/gulp": "0.0.5",
     "debug": "^2.2.0",
@@ -29,5 +32,10 @@
     "jscs": "^2.11.0",
     "mocha": "^2.4.5",
     "sinon-chai": "^2.8.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "coverage": "istanbul cover _mocha",
+    "lint": "eslint ."
   }
 }
