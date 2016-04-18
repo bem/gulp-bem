@@ -64,7 +64,7 @@ module.exports.bemtree = function(options) {
 };
 
 module.exports.toHtml = function(tmpl) {
-  return through.obj().pipe(geval()).pipe(through.obj(function(bemjsonFile, encoding, callback) {
+  return geval().pipe(through.obj(function(bemjsonFile, encoding, callback) {
     if (bemjsonFile.isNull()) {
       return callback(null, bemjsonFile);
     }
@@ -75,6 +75,9 @@ module.exports.toHtml = function(tmpl) {
     if (!isStream(tmpl)) {
       return callback(new PluginError(pluginName, 'Parameter should be a Stream'));
     }
+
+    // Handle multiple templates case
+    var n = 0;
 
     tmpl
       .pipe(through.obj(function(file, encoding, callback){
@@ -89,15 +92,14 @@ module.exports.toHtml = function(tmpl) {
           return callback(null, file);
         }
 
-        try {
-          var bemjson = eval(bemjsonFile.contents + '');
-          var html = file.data.apply(bemjson); // bemjsonFile.data);
-        } catch (e) {
-          return callback(e);
+        var html = tryCatch(_ => file.data.apply(bemjsonFile.data), callback);
+        if (!html) {
+          return callback(null);
         }
 
+        var name = path.basename(bemjsonFile.path).split('.')[0];
         var newFile = new File({
-          path: path.basename(bemjsonFile.path) + '.html',
+          path: name + (n-- || '') + '.html',
           contents: new Buffer(html)
         });
 
@@ -105,3 +107,11 @@ module.exports.toHtml = function(tmpl) {
       }));
     }));
 };
+
+function tryCatch(fn, cb) {
+  try {
+    return fn();
+  } catch (e) {
+    return cb(e);
+  }
+}
