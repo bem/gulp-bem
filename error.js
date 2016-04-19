@@ -6,9 +6,9 @@ var util = require('util');
 var format = util.format;
 
 /**
- * @param {Object} err
- * @param {String} code
- * @param {String} filepath
+ * @param {{description: string, column: number, lineNumber: number}} err - Error data
+ * @param {String} code - Code sample
+ * @param {String} filepath - Path to the file
  * @return {String|Object}
  */
 module.exports = function (err, code, filepath) {
