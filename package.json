@@ -31,8 +31,11 @@
   },
   "dependencies": {
     "bem-xjst": "^5.0.0",
+    "gulp-eval": "1.0.0-0",
     "gulp-util": "^3.0.7",
-    "through2": "^2.0.1"
+    "isstream": "^0.1.2",
+    "through2": "^2.0.1",
+    "vinyl": "^1.1.1"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",

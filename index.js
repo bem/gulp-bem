@@ -1,12 +1,14 @@
 'use strict';
 
 var assert = require('assert');
-var fs = require('fs');
 var path = require('path');
 
 var bemxjst = require('bem-xjst');
 var gutil = require('gulp-util');
 var through = require('through2');
+var geval = require('gulp-eval');
+var File = require('vinyl');
+var isStream = require('isstream');
 
 var formatError = require('./error');
 
@@ -20,12 +22,12 @@ var pluginName = path.basename(__dirname);
  * @param {Object} options
  * @returns {Stream}
  */
-module.exports = function (options, engine) {
+module.exports = function(options, engine) {
   options = options || {};
   engine = engine || 'bemhtml';
   assert(bemxjst[engine], 'Invalid engine');
 
-  return through.obj(function (file, encoding, callback) {
+  return through.obj(function(file, encoding, callback) {
     if (file.isNull()) {
       return callback(null, file);
     }
@@ -54,9 +56,62 @@ module.exports = function (options, engine) {
 };
 
 module.exports.bemhtml = function(options) {
-    return module.exports(options, 'bemhtml');
+  return module.exports(options, 'bemhtml');
 };
 
 module.exports.bemtree = function(options) {
-    return module.exports(options, 'bemtree');
+  return module.exports(options, 'bemtree');
 };
+
+module.exports.toHtml = function(tmpl) {
+  return geval().pipe(through.obj(function(bemjsonFile, encoding, callback) {
+    if (bemjsonFile.isNull()) {
+      return callback(null, bemjsonFile);
+    }
+    if (bemjsonFile.isStream()) {
+      return callback(new PluginError(pluginName, 'Streaming not supported'));
+    }
+
+    if (!isStream(tmpl)) {
+      return callback(new PluginError(pluginName, 'Parameter should be a Stream'));
+    }
+
+    // Handle multiple templates case
+    var n = 0;
+
+    tmpl
+      .pipe(through.obj(function(file, encoding, callback){
+        if (file.isStream()) {
+          return callback(new PluginError(pluginName, 'Substreaming not supported'));
+        }
+        return callback(null, file);
+      }))
+      .pipe(geval())
+      .pipe(through.obj(function(file) {
+        if (file.isNull()) {
+          return callback(null, file);
+        }
+
+        var html = tryCatch(_ => file.data.apply(bemjsonFile.data), callback);
+        if (!html) {
+          return callback(null);
+        }
+
+        var name = path.basename(bemjsonFile.path).split('.')[0];
+        var newFile = new File({
+          path: name + (n-- || '') + '.html',
+          contents: new Buffer(html)
+        });
+
+        return callback(null, newFile);
+      }));
+    }));
+};
+
+function tryCatch(fn, cb) {
+  try {
+    return fn();
+  } catch (e) {
+    return cb(e);
+  }
+}
