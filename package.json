@@ -26,7 +26,7 @@
     "Alexey Yaroshevich <zxqfox@gmail.com>"
   ],
   "scripts": {
-    "fetch-bemhtml": "mkdir -p syntax; curl https://raw.githubusercontent.com/bem/bem-core/v2/common.blocks/i-bem/i-bem.bemhtml -o syntax/i-bem.bemhtml",
+    "pretest": "eslint *.js test",
     "test": "mocha --bail --colors --reporter spec --ui bdd test"
   },
   "dependencies": {
