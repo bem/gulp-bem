@@ -19,7 +19,8 @@ var pluginName = path.basename(__dirname);
 /**
  * bem-xjst templates compiler.
  *
- * @param {Object} options
+ * @param {{extension: string}} options - Options for generator.
+ * @param {String} engine - bemhtml or bemtree.
  * @returns {Stream}
  */
 module.exports = function(options, engine) {
@@ -64,7 +65,7 @@ module.exports.bemtree = function(options) {
 };
 
 module.exports.toHtml = function(tmpl) {
-  return geval().pipe(through.obj(function(bemjsonFile, encoding, callback) {
+  return geval().pipe(through.obj(function(bemjsonFile, _, callback) {
     if (bemjsonFile.isNull()) {
       return callback(null, bemjsonFile);
     }
@@ -80,11 +81,11 @@ module.exports.toHtml = function(tmpl) {
     var n = 0;
 
     tmpl
-      .pipe(through.obj(function(file, encoding, callback){
+      .pipe(through.obj(function(file, __, tmplCallback){
         if (file.isStream()) {
-          return callback(new PluginError(pluginName, 'Substreaming not supported'));
+          return tmplCallback(new PluginError(pluginName, 'Substreaming not supported'));
         }
-        return callback(null, file);
+        return tmplCallback(null, file);
       }))
       .pipe(geval())
       .pipe(through.obj(function(file) {
@@ -92,7 +93,7 @@ module.exports.toHtml = function(tmpl) {
           return callback(null, file);
         }
 
-        var html = tryCatch(_ => file.data.apply(bemjsonFile.data), callback);
+        var html = tryCatch(() => file.data.apply(bemjsonFile.data), callback);
         if (!html) {
           return callback(null);
         }
@@ -108,6 +109,13 @@ module.exports.toHtml = function(tmpl) {
     }));
 };
 
+/**
+ * Try to run function and call handler if it throws.
+ *
+ * @param {Function} fn - Unsafe function body
+ * @param {Function} cb - Error handler
+ * @returns {*}
+ */
 function tryCatch(fn, cb) {
   try {
     return fn();
