@@ -1,6 +1,6 @@
 {
   "name": "@bem/gulp",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Gulp bemifier adaptorrre",
   "main": "lib/index.js",
   "scripts": {
