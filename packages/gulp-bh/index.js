@@ -1,4 +1,4 @@
-var eval = require('gulp-eval').eval;
+var eval = require('node-eval');
 var through = require('through2');
 var BH = require('bh').BH;
 var path = require('path');
