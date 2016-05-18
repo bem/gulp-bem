@@ -4,7 +4,8 @@
   "description": "Gulp bemifier adaptorrre",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha spec"
+    "test": "mocha spec",
+    "postpublish": "greenkeeper-postpublish"
   },
   "repository": {
     "type": "git",
@@ -43,6 +44,7 @@
     "vinyl-fs": "^2.3.1"
   },
   "devDependencies": {
+    "greenkeeper-postpublish": "^1.0.0",
     "gulp": "git://github.com/gulpjs/gulp.git#4.0",
     "mocha": "^2.3.4"
   }
