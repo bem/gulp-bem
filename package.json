@@ -46,6 +46,6 @@
   "devDependencies": {
     "greenkeeper-postpublish": "^1.0.0",
     "gulp": "git://github.com/gulpjs/gulp.git#4.0",
-    "mocha": "^2.3.4"
+    "mocha": "^2.5.2"
   }
 }
