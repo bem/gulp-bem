@@ -1,0 +1,43 @@
+{
+  "name": "gulp-bem-bundle-builder",
+  "version": "0.0.1",
+  "description": "gulp-bem bundle builder",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gulp-bem/gulp-bem-bundle-builder.git"
+  },
+  "keywords": [
+    "gulp",
+    "bem",
+    "bundle"
+  ],
+  "author": "Alexey Yaroshevich <zxqfox@gmail.com>",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/gulp-bem/gulp-bem-bundle-builder/issues"
+  },
+  "homepage": "https://github.com/gulp-bem/gulp-bem-bundle-builder#readme",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "bem-bundle": "^0.1.0",
+    "gulp-bem-src": "gulp-bem/gulp-bem-src#511ad0b",
+    "merge2": "^1.0.2",
+    "node-eval": "^1.0.3",
+    "through2": "^2.0.1",
+    "vinyl": "^1.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "gulp-concat": "^2.6.0",
+    "mocha": "^2.5.3",
+    "mock-fs": "^3.11.0",
+    "stream-from-array": "^1.0.0",
+    "stream-to-array": "^2.3.0"
+  }
+}
