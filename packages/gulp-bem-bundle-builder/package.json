@@ -1,6 +1,6 @@
 {
   "name": "gulp-bem-bundle-builder",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "gulp-bem bundle builder",
   "main": "lib/index.js",
   "scripts": {
