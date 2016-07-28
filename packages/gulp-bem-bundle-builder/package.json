@@ -25,7 +25,7 @@
     "lib"
   ],
   "dependencies": {
-    "bem-bundle": "^0.1.0",
+    "bem-bundle": "^0.2.0",
     "gulp-bem-src": "gulp-bem/gulp-bem-src#511ad0b",
     "merge2": "^1.0.2",
     "node-eval": "^1.0.3",

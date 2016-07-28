@@ -19,7 +19,7 @@ module.exports = function(opts) {
     return function builder(targets) {
         return thru.obj(function(bundle, enc, cb) {
             assert(File.isVinyl(bundle) && ~['bemjson.js', 'bemdecl.js'].indexOf(pathTech(bundle.path)) ||
-                bundle instanceof BemBundle,
+                BemBundle.isBundle(bundle),
                 'Unacceptable object:' + bundle);
 
             try {
