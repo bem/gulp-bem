@@ -21,7 +21,7 @@ afterEach(mockfs.restore);
 it('should generate js/css files for bemBundle', () => {
   mockfs({
     'blocks/b/b.css': ``,
-    'bundles/bundle2/bundle2.bemdecl.js': `['b']`,
+    'bundles/bundle2/bundle2.bemdecl.js': `[{block: 'b'}]`,
     'bundles/bundle2/bundle-blocks/b/b.js': `console.log(1);`,
     'bundles/bundle2/bundle-blocks/b/b.css': `body { color: red }`
   });
@@ -29,7 +29,7 @@ it('should generate js/css files for bemBundle', () => {
       new BemBundle({
         path: 'bundles/bundle2/bundle2.bemdecl.js',
         decl: [{block: 'b'}],
-        levels: ['bundles/bundle2/bundle-blocks']
+        levels: ['bundle-blocks']
       })
     ])
     // Stream<BemBundle>
@@ -39,13 +39,37 @@ it('should generate js/css files for bemBundle', () => {
     }))
   )
     .then(array => {
-      array.map(f => path.basename(f.path)).should.eql(['bundle2.js', 'bundle2.css']);
+      array.map(f => f.path).should.eql(['bundles/bundle2/bundle2.js', 'bundles/bundle2/bundle2.css']);
     });
 });
 
-it('should generate js/css files for vinyl', () => {
+it('should generate js/css files for bemBundle', () => {
   mockfs({
-    'bundles/bundle2/bundle2.bemdecl.js': `['b']`,
+    'blocks/b/b.css': ``,
+    'blocks/b/b.js': ``,
+    'bundleX.bemdecl.js': `[{block: 'b'}]`
+  });
+  return toArray(streamFromArray.obj([
+      new BemBundle({
+        path: 'bundleX.bemdecl.js',
+        decl: [{block: 'b'}]
+      })
+    ])
+    // Stream<BemBundle>
+    .pipe(builder({
+      js: bundle => bundle.src('js').pipe(concat(bundle.name + '.js')),
+      css: bundle => bundle.src('css').pipe(concat(bundle.name + '.css'))
+    }))
+  )
+    .then(array => {
+      array.map(f => f.path).should.eql(['bundleX.js', 'bundleX.css']);
+    });
+});
+
+// TODO: split to few test cases
+it('should generate js/css files for vinyl and resolve paths correctly', () => {
+  mockfs({
+    'bundles/bundle2/bundle2.bemdecl.js': `[{block:'b'}]`,
     'blocks/b/b.js': `window`,
     'blocks/b/b.css': `html { background: green }`
   });
@@ -64,7 +88,17 @@ it('should generate js/css files for vinyl', () => {
     }))
   )
     .then(array => {
-      array.map(f => path.basename(f.path)).should.eql(['b.js', 'b.css']);
+      array.map(f => ({
+        path: f.path,
+        relative: f.relative
+      }))
+        .should.eql([{
+          path: 'bundles/bundle2/b/b.js',
+          relative: 'b/b.js'
+        }, {
+          path: 'bundles/bundle2/b/b.css',
+          relative: 'b/b.css'
+        }]);
     });
 });
 

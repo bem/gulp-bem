@@ -29,10 +29,16 @@ module.exports = function(opts) {
                 return;
             }
 
+            bundle.dirname = path.dirname(bundle.path);
+
+            const levels = [].concat(opts.levels)
+                .concat(bundle.levels.map(level => path.relative(process.cwd(), path.join(bundle.dirname, level))))
+                .filter(Boolean);
+
             const ctx = Object.assign(bundle, {
                 src: function(tech) {
                     return gulpBemSrc(
-                        [].concat(opts.levels).concat(bundle.levels),
+                        levels,
                         bundle.decl,
                         tech,
                         opts
@@ -48,6 +54,11 @@ module.exports = function(opts) {
             merge(Object.keys(targets).map(target => {
                 const streamGenerator = targets[target];
                 const stream = streamGenerator(ctx);
+                stream.on('data', chunk => {
+                    const dirname = path.dirname(bundle.path);
+                    chunk.path = path.join(dirname, chunk.relative);
+                    chunk.base = dirname;
+                });
                 stream.on('error', cb);
                 // later... resolve targets for ctx.target
                 return stream; //.pipe(concat(ctx.name + '.' + target));
