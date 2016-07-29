@@ -4,6 +4,7 @@ describe('gulp-bemhtml', function () {
   var lib = require('..');
   var expect = require('expect.js');
   var gutil = require('gulp-util');
+  var _eval = require('node-eval');
 
   describe('stream', function () {
     var stream;
@@ -14,13 +15,15 @@ describe('gulp-bemhtml', function () {
 
       stream.on('data', function (file) {
         vinylFile = file;
-        next();
-      });
+      })
+      .on('error', next)
+      .on('end', next);
 
       stream.write(new gutil.File({
         path: 'page.bemhtml',
         contents: new Buffer('block(\'page\')(tag()(\'h1\'), content()(\'Hello, world!\'));')
       }));
+      stream.end();
     });
 
     it('changes file extension to *.bemhtml.js', function () {
@@ -28,8 +31,7 @@ describe('gulp-bemhtml', function () {
     });
 
     it('outputs bemhtml templates compiler', function () {
-      eval(vinylFile.contents.toString());
-      var bemhtml = exports;
+      var bemhtml = _eval(vinylFile.contents.toString());
       expect(bemhtml.apply({block: 'page'})).to.be.equal('<h1 class="page">Hello, world!</h1>');
     });
   });

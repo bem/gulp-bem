@@ -21,13 +21,17 @@ var pluginName = path.basename(__dirname);
  * bem-xjst templates compiler.
  *
  * @param {{extension: string}} options - Options for generator.
- * @param {String} engine - bemhtml or bemtree.
+ * @param {String|Function} engine - 'bemhtml' either 'bemtree' or any xjst-like engine function.
  * @returns {Stream}
  */
 module.exports = function(options, engine) {
   options = options || {};
-  engine = engine || 'bemhtml';
-  assert(bemxjst[engine], 'Invalid engine');
+
+  assert(typeof engine === 'string', 'Invalid engine');
+
+  var engineName;
+  engineName = engine;
+  engine = bemxjst[engine];
 
   return through.obj(function(file, encoding, callback) {
     if (file.isNull()) {
@@ -42,7 +46,7 @@ module.exports = function(options, engine) {
     var code = file.contents.toString();
 
     try {
-      res = bemxjst[engine].generate(code, options);
+      res = engine.generate(code, options);
     } catch (e) {
       var err = new PluginError(pluginName, formatError(e, code, file.path), {
         fileName: file.path
@@ -51,7 +55,8 @@ module.exports = function(options, engine) {
     }
 
     file.contents = new Buffer(res);
-    file.path = gutil.replaceExtension(file.path, options.extension || ('.' + engine + '.js'));
+    file.path = path.basename(file.path).split('.')[0] +
+      '.' + (options.extension || (engineName + '.js')).replace(/^\./, '');
 
     callback(null, file);
   });
