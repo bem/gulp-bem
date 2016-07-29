@@ -27,11 +27,15 @@ var pluginName = path.basename(__dirname);
 module.exports = function(options, engine) {
   options = options || {};
 
-  assert(typeof engine === 'string', 'Invalid engine');
+  assert(typeof engine === 'string' || typeof (engine && engine.generate) === 'function', 'Invalid engine');
 
   var engineName;
-  engineName = engine;
-  engine = bemxjst[engine];
+  if (typeof engine === 'string') {
+    engineName = engine;
+    engine = bemxjst[engine];
+  } else {
+    engineName = (engine.name || engine.runtime.name).toLowerCase() || 'xjst';
+  }
 
   return through.obj(function(file, encoding, callback) {
     if (file.isNull()) {
