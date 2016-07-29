@@ -3,12 +3,13 @@
 var assert = require('assert');
 var path = require('path');
 
+var _eval = require('node-eval');
 var bemxjst = require('bem-xjst');
 var gutil = require('gulp-util');
 var through = require('through2');
-var geval = require('gulp-eval');
 var File = require('vinyl');
 var isStream = require('isstream');
+var toArray = require('stream-to-array');
 
 var formatError = require('./error');
 
@@ -64,8 +65,20 @@ module.exports.bemtree = function(options) {
   return module.exports(options, 'bemtree');
 };
 
-module.exports.toHtml = function(tmpl) {
-  return geval().pipe(through.obj(function(bemjsonFile, _, callback) {
+/**
+ * Wrapper for anything.apply with bemjson.
+ *
+ * @param {Stream<Vinyl>} templatesStream - Stream with bemhtmls
+ * @returns {TransformStream<Vinyl>} - transform stream that applies templates to each incoming bemjson vinyl
+ */
+module.exports.toHtml = function(templatesStream) {
+  if (!isStream(templatesStream)) {
+    throw new PluginError(pluginName, 'Parameter should be a Stream');
+  }
+
+  var templatesPromise = toArray(templatesStream);
+
+  return through.obj(function(bemjsonFile, _, callback) {
     if (bemjsonFile.isNull()) {
       return callback(null, bemjsonFile);
     }
@@ -73,40 +86,52 @@ module.exports.toHtml = function(tmpl) {
       return callback(new PluginError(pluginName, 'Streaming not supported'));
     }
 
-    if (!isStream(tmpl)) {
-      return callback(new PluginError(pluginName, 'Parameter should be a Stream'));
+    tryCatch(function () {
+      return bemjsonFile.data || (bemjsonFile.data = _eval(String(bemjsonFile.contents)));
+    }, function (err) {
+      callback(new PluginError(pluginName, 'Error at evaluating bemjson: ' + err));
+    });
+
+    if (!bemjsonFile.data) {
+      callback();
+      return;
     }
 
-    // Handle multiple templates case
-    var n = 0;
+    var _this = this;
 
-    tmpl
-      .pipe(through.obj(function(file, __, tmplCallback){
-        if (file.isStream()) {
-          return tmplCallback(new PluginError(pluginName, 'Substreaming not supported'));
-        }
-        return tmplCallback(null, file);
-      }))
-      .pipe(geval())
-      .pipe(through.obj(function(file) {
-        if (file.isNull()) {
-          return callback(null, file);
-        }
+    templatesPromise
+      .then(function (templatesVinyls) {
+        // Handle multiple templates case
+        var n = 0;
 
-        var html = tryCatch(() => file.data.apply(bemjsonFile.data), callback);
-        if (!html) {
-          return callback(null);
-        }
+        templatesVinyls.forEach(function(file) {
+          file.data || (file.data = _eval(String(file.contents)));
 
-        var name = path.basename(bemjsonFile.path).split('.')[0];
-        var newFile = new File({
-          path: name + (n-- || '') + '.html',
-          contents: new Buffer(html)
+          var html = tryCatch(function () {
+            return file.data.apply(bemjsonFile.data);
+          }, function (err) {
+            throw new Error('BEMHTML error: ' + err);
+          });
+
+          if (typeof html !== 'string') {
+            throw new Error('Incorrect html result.');
+          }
+
+          var name = path.basename(bemjsonFile.path).split('.')[0];
+          var newFile = new File({
+            path: name + (n-- || '') + '.html',
+            contents: new Buffer(html)
+          });
+
+          _this.push(newFile);
         });
 
-        return callback(null, newFile);
-      }));
-    }));
+        callback();
+      })
+      .catch(function (err) {
+        callback(new PluginError(pluginName, err));
+      });
+  });
 };
 
 /**

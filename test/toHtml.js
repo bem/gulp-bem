@@ -12,21 +12,21 @@ describe('toHtml', function () {
         var res = lib.toHtml(bemhtmlStream)
             .on('data', function (file) {
                 expect(file.contents + '').to.be.equal('<h1 class="page">Hello, world!</h1>');
-                done();
-            });
+            })
+            .on('error', done)
+            .on('end', done);
 
         res.write(new gutil.File({
-                path: 'index.bemjson.js',
-                contents: new Buffer('module.export = { block: \'page\' }')
-            }));
-
-        res.write(null);
+            path: 'index.bemjson.js',
+            contents: new Buffer('module.exports = { block: \'page\' }')
+        }));
+        res.end();
 
         bemhtmlStream.write(new gutil.File({
-            path: 'page.bemhtml',
+            path: 'page.bemhtml.js',
             contents: new Buffer('block(\'page\')(tag()(\'h1\'), content()(\'Hello, world!\'));')
         }));
-        bemhtmlStream.write(null)
+        bemhtmlStream.end();
 
     });
 });
