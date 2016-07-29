@@ -30,17 +30,17 @@
     "test": "mocha --bail --colors --reporter spec --ui bdd test"
   },
   "dependencies": {
-    "bem-xjst": "^5.0.0",
+    "bem-xjst": "^6.5.4",
     "gulp-util": "^3.0.7",
     "isstream": "^0.1.2",
     "node-eval": "^1.0.3",
     "stream-to-array": "^2.3.0",
     "through2": "^2.0.1",
-    "vinyl": "^1.1.1"
+    "vinyl": "^1.2.0"
   },
   "devDependencies": {
-    "eslint": "^2.8.0",
-    "eslint-config-pedant": "^0.3.0",
+    "eslint": "^3.1.1",
+    "eslint-config-pedant": "^0.7.0",
     "expect.js": "^0.3.1",
     "mocha": "^2.1.0"
   }
