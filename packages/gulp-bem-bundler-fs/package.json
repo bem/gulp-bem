@@ -19,8 +19,12 @@
     "node": ">= 4.0"
   },
   "dependencies": {
+    "bem-bundle": "^0.2.0",
+    "bem-decl": "^0.2.2",
     "glob": "7.0.3",
-    "vinyl": "1.1.0"
+    "globby": "^6.0.0",
+    "mz": "^2.4.0",
+    "node-eval": "^1.0.3"
   },
   "devDependencies": {
     "eslint": "2.6.0",

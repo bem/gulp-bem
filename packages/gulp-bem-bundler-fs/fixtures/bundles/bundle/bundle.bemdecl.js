@@ -1,3 +1,3 @@
 module.exports = [
-    { block: 'button' }
+    { block: 'button', elems: ['text', 'control'] }
 ];
