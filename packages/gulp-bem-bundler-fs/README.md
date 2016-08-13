@@ -26,24 +26,28 @@ Usage
 
 ```js
 const bundler = require('gulp-bem-bundler-fs');
-const builder = require('gulp-bem-bundle-builder');
+const Builder = require('gulp-bem-bundle-builder');
 
+const concat = require('gulp-concat');
 const stylus = require('gulp-stylus');
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 const postcssUrl = require('postcss-url');
 
+// Configuring builder
+const builder = Builder();
+
 bundler('*.bundles/*')
-    .pipe(builder(bundle => ({
-        css: {
-            transform: stylus()
-                .pipe(postcss([
-                    autoprefixer({
-                        browsers: ['ie >= 10', 'last 2 versions', 'opera 12.1', '> 2%']
-                    }),
-                    postcssUrl({ url: 'inline' })
-                ]))
-                .pipe(csso())
-        }
-    })));
+    .pipe(builder({
+        css: bundle => bundle.src('css')
+            .pipe(stylus())
+            .pipe(postcss([
+                autoprefixer({
+                    browsers: ['ie >= 10', 'last 2 versions', 'opera 12.1', '> 2%']
+                }),
+                postcssUrl({ url: 'inline' })
+            ]))
+            .pipe(csso())
+            .pipe(concat(`${bundle.name}.css`))
+    }));
 ```
