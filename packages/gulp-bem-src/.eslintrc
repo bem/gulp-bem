@@ -5,8 +5,6 @@ parserOptions:
 env:
   node: true
   es6: true
+  mocha: true
 
-extends: pedant
-
-rules:
-  no-shadow: off
+extends: pedant/es6
