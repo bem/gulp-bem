@@ -36,12 +36,12 @@ module.exports = function(opts) {
                 .filter(Boolean);
 
             const ctx = Object.assign(bundle, {
-                src: function(tech) {
+                src: function(tech, subopts) {
                     return gulpBemSrc(
                         levels,
                         bundle.decl,
                         tech,
-                        opts
+                        Object.assign({}, opts, subopts)
                     ).on('error', cb);
                 },
                 target: function(tech) {
