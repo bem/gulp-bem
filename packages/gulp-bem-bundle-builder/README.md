@@ -91,6 +91,11 @@ builder({
 });
 ```
 
+## License
+
+Code and documentation copyright 2016 YANDEX LLC. Code released under the [Mozilla Public License 2.0](LICENSE.txt).
+
+
 [`BemBundle`]:   https://github.com/bem-sdk/bem-bundle
 [`Vinyl`]:       https://github.com/gulpjs/vinyl
 [BEM entity]:    https://en.bem.info/methodology/key-concepts/#bem-entity
