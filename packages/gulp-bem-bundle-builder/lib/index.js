@@ -11,9 +11,17 @@ const BemBundle = require('bem-bundle');
 const File = require('vinyl');
 
 /**
+ * @typedef {{
+ *   src: function(tech: String, opts: ?Object): Stream<Vinyl>,
+ *   target: function(target: String): Stream<Vinyl>
+ * }} Builder~Bundle
+ */
+
+/**
  * @param {Object} opts
  * @param {?BemConfig} opts.config
- * @returns {function(targets: String|String[]): Stream<Vinyl>}
+ * @param {?Array[]} opts.levels
+ * @returns {function(targets: Object<String, function(bundle: Builder~Bundle): Stream<Vinyl>>): Stream<Vinyl>}
  */
 module.exports = function(opts) {
     return function builder(targets) {
