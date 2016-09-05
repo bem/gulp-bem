@@ -1,5 +1,7 @@
 const test = require('ava');
 
+const Stream = require('stream');
+
 const concat = require('gulp-concat');
 const streamFromArray = require('stream-from-array');
 const toArray = require('stream-to-array');
@@ -97,4 +99,55 @@ test.serial('should generate js/css files for vinyl and resolve paths correctly'
           relative: 'b/b.css'
         }]);
     });
+});
+
+test('should not pass non-vinyl and non-bem-bundle objects', t => {
+    t.throws(toArray(streamFromArray.obj([
+        {}
+    ])
+    .pipe(builder({any: () => {}}))),
+    /Unacceptable object.*/);
+});
+
+test('should not pass unknown objects as ', t => {
+    t.throws(toArray(streamFromArray.obj([
+        new File({path: 'unknown.file', contents: ''})
+    ])
+    .pipe(builder({any: () => {}}))),
+    /Unacceptable.*unknown.file/);
+});
+
+test('should not pass unknown objects as ', t => {
+    t.throws(toArray(streamFromArray.obj([
+        new File({path: 'qqq.bemjson.js', contents: new Buffer('wtf!content')})
+    ])
+    .pipe(builder({any: () => {}}))),
+    /Unexpected token.*/);
+});
+
+test('should catch throwed error in stream generator', t => {
+    t.throws(toArray(streamFromArray.obj([
+        new BemBundle({
+            path: 'bundle.bemdecl.js',
+            decl: []
+        })
+    ])
+    // Stream<BemBundle>
+    .pipe(builder({
+        css: () => { throw new Error('oops'); }
+    }))), /oops/);
+});
+
+test('should reemit an error in stream generator', t => {
+    t.throws(toArray(streamFromArray.obj([
+        new BemBundle({
+            path: 'bundle.bemdecl.js',
+            decl: [{block: 'b'}]
+        })
+    ])
+    // Stream<BemBundle>
+    .pipe(builder({
+        res: () => (new Stream.Readable({objectMode: true, read: () => {}}))
+            .emit('error', new Error('oops'))
+    }))), /oops/);
 });

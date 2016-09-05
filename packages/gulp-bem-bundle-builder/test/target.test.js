@@ -92,3 +92,16 @@ test.serial('should try to load files from fs if there is no target', t => {
             t.deepEqual(array.map(f => `${f.path}: ${f.contents}`),
                 ['bundle.res: x']));
 });
+
+test('should catch and emit an error for target', t => {
+    t.throws(toArray(streamFromArray.obj([
+        new BemBundle({
+            path: 'bundle.bemdecl.js',
+            decl: [{block: 'b'}]
+        })
+    ])
+    // Stream<BemBundle>
+    .pipe(builder({
+        res: bundle => bundle.target('unknown.target')
+    }))), /ENOENT:.*bundle.unknown.target/);
+});

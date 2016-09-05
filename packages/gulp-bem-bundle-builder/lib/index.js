@@ -2,6 +2,7 @@
 
 const assert = require('assert');
 const path = require('path');
+const util = require('util');
 
 const fs = require('mz/fs');
 const _eval = require('node-eval');
@@ -27,14 +28,14 @@ const File = require('vinyl');
 module.exports = function(opts) {
     return function builder(targets) {
         return thru.obj(function(bundle, enc, cb) {
-            assert(File.isVinyl(bundle) && ~['bemjson.js', 'bemdecl.js'].indexOf(pathTech(bundle.path)) ||
-                BemBundle.isBundle(bundle),
-                'Unacceptable object:' + bundle);
+            tryCatch(() =>
+                assert(File.isVinyl(bundle) || BemBundle.isBundle(bundle),
+                    'Unacceptable object: ' + util.inspect(bundle)),
+                (e) => (bundle = cb(e)));
 
-            try {
-                File.isVinyl(bundle) && (bundle = createBundleFromVinyl(bundle));
-            } catch(e) {
-                cb(e);
+            File.isVinyl(bundle) && (bundle = tryCatch(() => createBundleFromVinyl(bundle), cb));
+
+            if (!bundle) {
                 return;
             }
 
@@ -79,10 +80,7 @@ module.exports = function(opts) {
                             chunks.forEach(chunk => out.push(chunk));
                             out.push(null);
                         })
-                        .catch(e => {
-                            out.emit('error', e);
-                            out.push(null);
-                        });
+                        .catch(e => out.emit('error', e));
 
                     return out;
                 }
@@ -92,9 +90,13 @@ module.exports = function(opts) {
 
             merge(Object.keys(targets).map(target => {
                 const streamGenerator = targets[target];
-                const stream = streamGenerator(ctx);
+                const stream = tryCatch(() => streamGenerator(ctx), cb);
 
-                targetDataBuffer[target] = new Promise((resolve, reject) => {
+                if (!stream) {
+                    return thru.obj();
+                }
+
+                targetDataBuffer[target] = new Promise(resolve => {
                     const chunks = [];
                     stream
                         .on('data', chunk => {
@@ -102,18 +104,13 @@ module.exports = function(opts) {
                             chunk.base = bundle.dirname;
                             chunks.push(chunk);
                         })
-                        .on('error', e => {
-                            reject(e);
-                            cb(e);
-                        })
+                        .on('error', cb)
                         .on('end', () => resolve(chunks));
                 });
 
                 return stream; //.pipe(concat(ctx.name + '.' + target));
             }))
-                .on('data', function(file) {
-                    res.push(file);
-                })
+                .on('data', file => res.push(file))
                 .on('error', cb)
                 .on('end', cb);
         });
@@ -121,13 +118,24 @@ module.exports = function(opts) {
 };
 
 function createBundleFromVinyl(file) {
-    const key = (pathTech(file.path) === 'bemjson.js') ? 'bemjson' : 'decl';
+    const tech = pathTech(file.path);
+    assert(['bemjson.js', 'bemdecl.js'].indexOf(tech) !== -1, `Unacceptable file: ${file.path}`);
+
+    const key = (tech === 'bemjson.js') ? 'bemjson' : 'decl';
     const data = {path: file.path};
     data[key] = _eval(String(file.contents));
-    // Should we read internal levels?
+
     return new BemBundle(data);
 }
 
 function pathTech(fullpath) {
     return path.basename(fullpath).split('.').slice(1).join('.');
+}
+
+function tryCatch(fn, cb) {
+    try {
+        return fn();
+    } catch(e) {
+        cb(e);
+    }
 }
