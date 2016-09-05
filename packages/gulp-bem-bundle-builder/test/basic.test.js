@@ -1,10 +1,9 @@
-const path = require('path');
+const test = require('ava');
 
 const concat = require('gulp-concat');
 const streamFromArray = require('stream-from-array');
 const toArray = require('stream-to-array');
 const mockfs = require('mock-fs');
-const chai = require('chai');
 
 const BemBundle = require('bem-bundle');
 const File = require('vinyl');
@@ -12,13 +11,9 @@ const File = require('vinyl');
 const Builder = require('..');
 const builder = Builder({levels: 'blocks'});
 
-chai.should();
+test.afterEach.always(() => mockfs.restore());
 
-describe('basic', function() {
-
-afterEach(mockfs.restore);
-
-it('should generate js/css files for bemBundle', () => {
+test.serial('should generate js/css files for bemBundle', t => {
   mockfs({
     'blocks/b/b.css': ``,
     'bundles/bundle2/bundle2.bemdecl.js': `[{block: 'b'}]`,
@@ -39,11 +34,12 @@ it('should generate js/css files for bemBundle', () => {
     }))
   )
     .then(array => {
-      array.map(f => f.path).should.eql(['bundles/bundle2/bundle2.js', 'bundles/bundle2/bundle2.css']);
+      t.deepEqual(array.map(f => f.path),
+        ['bundles/bundle2/bundle2.js', 'bundles/bundle2/bundle2.css']);
     });
 });
 
-it('should generate js/css files for bemBundle', () => {
+test.serial('should generate js/css files for bemBundle', t => {
   mockfs({
     'blocks/b/b.css': ``,
     'blocks/b/b.js': ``,
@@ -62,12 +58,13 @@ it('should generate js/css files for bemBundle', () => {
     }))
   )
     .then(array => {
-      array.map(f => f.path).should.eql(['bundleX.js', 'bundleX.css']);
+      t.deepEqual(array.map(f => f.path),
+        ['bundleX.js', 'bundleX.css']);
     });
 });
 
 // TODO: split to few test cases
-it('should generate js/css files for vinyl and resolve paths correctly', () => {
+test.serial('should generate js/css files for vinyl and resolve paths correctly', t => {
   mockfs({
     'bundles/bundle2/bundle2.bemdecl.js': `[{block:'b'}]`,
     'blocks/b/b.js': `window`,
@@ -88,11 +85,11 @@ it('should generate js/css files for vinyl and resolve paths correctly', () => {
     }))
   )
     .then(array => {
-      array.map(f => ({
+      t.deepEqual(array.map(f => ({
         path: f.path,
         relative: f.relative
-      }))
-        .should.eql([{
+      })),
+        [{
           path: 'bundles/bundle2/b/b.js',
           relative: 'b/b.js'
         }, {
@@ -100,6 +97,4 @@ it('should generate js/css files for vinyl and resolve paths correctly', () => {
           relative: 'b/b.css'
         }]);
     });
-});
-
 });

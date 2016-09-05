@@ -18,10 +18,10 @@ const File = require('vinyl');
  */
 
 /**
- * @param {Object} opts
- * @param {?BemConfig} opts.config
- * @param {?Array[]} opts.levels
- * @returns {function(targets: Object<String, function(bundle: Builder~Bundle): Stream<Vinyl>>): Stream<Vinyl>}
+ * @param {Object} opts - options that also will be passed to src
+ * @param {?BemConfig} opts.config - BemConfig instance with project configuration
+ * @param {?Array<String>} opts.levels - levels to use by default for builds
+ * @returns {function(Object<String, function(bundle: Builder~Bundle): Stream<Vinyl>>): Stream<Vinyl>}
  */
 module.exports = function(opts) {
     return function builder(targets) {
@@ -52,7 +52,7 @@ module.exports = function(opts) {
                         Object.assign({}, opts, subopts)
                     ).on('error', cb);
                 },
-                target: function(tech) {
+                target: function() {
                     // later... provide stream of a target on resolve
                 }
             });

@@ -4,7 +4,10 @@
   "description": "gulp-bem bundle builder",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha"
+    "pretest": "npm run lint",
+    "test": "nyc ava",
+    "lint": "eslint .",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -28,15 +31,19 @@
     "bem-bundle": "^0.2.0",
     "gulp-bem-src": "0.0.2",
     "merge2": "^1.0.2",
+    "mz": "^2.4.0",
     "node-eval": "^1.0.3",
     "through2": "^2.0.1",
     "vinyl": "^1.1.1"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
+    "ava": "^0.16.0",
+    "coveralls": "^2.11.12",
+    "eslint": "^3.4.0",
+    "eslint-config-pedant": "^0.8.0",
     "gulp-concat": "^2.6.0",
-    "mocha": "^2.5.3",
     "mock-fs": "^3.11.0",
+    "nyc": "^8.1.0",
     "stream-from-array": "^1.0.0",
     "stream-to-array": "^2.3.0"
   }
