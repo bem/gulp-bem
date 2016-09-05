@@ -3,6 +3,7 @@
 const assert = require('assert');
 const path = require('path');
 
+const fs = require('mz/fs');
 const _eval = require('node-eval');
 const merge = require('merge2');
 const gulpBemSrc = require('gulp-bem-src');
@@ -37,11 +38,14 @@ module.exports = function(opts) {
                 return;
             }
 
+            // Drop after https://github.com/bem-sdk/bem-bundle/issues/7
             bundle.dirname = path.dirname(bundle.path);
 
             const levels = [].concat(opts.levels)
                 .concat(bundle.levels.map(level => path.relative(process.cwd(), path.join(bundle.dirname, level))))
                 .filter(Boolean);
+
+            const targetDataBuffer = {};
 
             const ctx = Object.assign(bundle, {
                 src: function(tech, subopts) {
@@ -52,23 +56,59 @@ module.exports = function(opts) {
                         Object.assign({}, opts, subopts)
                     ).on('error', cb);
                 },
-                target: function() {
-                    // later... provide stream of a target on resolve
+                target: function(target) {
+                    const filePath = () => path.join(bundle.dirname, `${bundle.name}.${target}`);
+
+                    // Dynamically create buffer for unknown target to read file
+                    const buffer = targetDataBuffer[target] ||
+                        (targetDataBuffer[target] =
+                            fs.readFile(filePath())
+                                .then(contents => [
+                                    new File({
+                                        base: bundle.dirname,
+                                        name: bundle.name,
+                                        path: filePath(),
+                                        contents
+                                    })
+                                ]));
+
+                    const out = thru.obj();
+
+                    buffer
+                        .then(chunks => {
+                            chunks.forEach(chunk => out.push(chunk));
+                            out.push(null);
+                        })
+                        .catch(e => {
+                            out.emit('error', e);
+                            out.push(null);
+                        });
+
+                    return out;
                 }
             });
 
-            var res = this;
+            const res = this;
 
             merge(Object.keys(targets).map(target => {
                 const streamGenerator = targets[target];
                 const stream = streamGenerator(ctx);
-                stream.on('data', chunk => {
-                    const dirname = path.dirname(bundle.path);
-                    chunk.path = path.join(dirname, chunk.relative);
-                    chunk.base = dirname;
+
+                targetDataBuffer[target] = new Promise((resolve, reject) => {
+                    const chunks = [];
+                    stream
+                        .on('data', chunk => {
+                            chunk.path = path.join(bundle.dirname, chunk.relative);
+                            chunk.base = bundle.dirname;
+                            chunks.push(chunk);
+                        })
+                        .on('error', e => {
+                            reject(e);
+                            cb(e);
+                        })
+                        .on('end', () => resolve(chunks));
                 });
-                stream.on('error', cb);
-                // later... resolve targets for ctx.target
+
                 return stream; //.pipe(concat(ctx.name + '.' + target));
             }))
                 .on('data', function(file) {
