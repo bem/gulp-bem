@@ -74,9 +74,8 @@ module.exports = function(pattern, opts) {
                     decl && (bundle.decl = declNormalize(nodeEval(decl)));
                     bemjson && (bundle.bemjson = nodeEval(bemjson));
                 })
-                .then(() => new BemBundle(bundle))
+                .then(() => output.push(new BemBundle(bundle)))
         })))
-        .then(bundle => output.push(bundle))
         .catch(err => {
             console.error(err.stack);
             output.emit(err)
