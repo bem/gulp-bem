@@ -1,34 +1,26 @@
 'use strict';
 
-var path = require('path');
-
+var fs = require('fs');
 var through = require('through2');
-var gutil = require('gulp-util');
-
-var PluginError = gutil.PluginError;
-var pluginName = path.basename(__dirname);
 
 /**
  * BEM i18n gulp plugin
  *
  * @param {Object} options options for plugin
+ * @param {String[]} options.langs list of supported languages
  *
  * @returns {Stream}
  */
 module.exports = function (options) {
     options = options || {};
 
-    return through.obj(function (file, encoding, callback) {
-        if (file.isNull()) {
-            return callback(null, file);
+    return through.obj(function (folder, encoding, callback) {
+        if (!folder) {
+            return callback(null, folder);
         }
-
-        if (file.isStream()) {
-            return callback(new PluginError(pluginName, 'Stream not supported'));
-        }
-
         console.log('------ START -----');
-        console.log(file);
+        console.log(fs.readdirSync(folder));
         console.log('------- END -------');
+        // TODO: i18n
     });
 };
