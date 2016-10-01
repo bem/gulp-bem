@@ -2,6 +2,11 @@
     "parserOptions": {
         "ecmaVersion": "6"
     },
+    "globals": {
+        "describe": true,
+        "it": true,
+        "expect": true
+    },
     "env": {
         "node": true
     },
