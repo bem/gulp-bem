@@ -18,9 +18,11 @@ module.exports = function (options) {
         if (!folder) {
             return callback(null, folder);
         }
+
         console.log('------ START -----');
-        console.log(fs.readdirSync(folder));
+        console.log(folder);
         console.log('------- END -------');
         // TODO: i18n
+        callback(null, folder);
     });
 };

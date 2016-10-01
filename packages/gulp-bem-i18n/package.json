@@ -24,7 +24,8 @@
     "eslint-config-pedant": "^0.8.0",
     "expect": "^1.20.2",
     "mocha": "^3.1.0",
-    "mock-fs": "^3.11.0"
+    "mock-fs": "^3.11.0",
+    "stream-from-array": "^1.0.0"
   },
   "dependencies": {
     "gulp-util": "^3.0.7",

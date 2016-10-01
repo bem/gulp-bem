@@ -3,6 +3,8 @@
 var path = require('path');
 var lib = require('..');
 var mock = require('mock-fs');
+var gutil = require('gulp-util');
+var StreamFromArray = require('stream-from-array');
 
 var basePath = path.join(__dirname, '..');
 
@@ -25,8 +27,14 @@ describe('gulp-bem-i18n', function () {
     });
 
     it('test', function () {
-        var stream = lib({});
-        stream.write('common.blocks/header/header.i18n');
-        stream.end();
+        var folders = [
+            new gutil.File({
+                path: 'common.blocks/header/header.i18n'
+            }),
+            new gutil.File({
+                path: 'common.blocks/page-layout/page-layout.i18n'
+            })
+        ];
+        StreamFromArray.obj(folders).pipe(lib({}));
     });
 });
