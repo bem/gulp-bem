@@ -43,7 +43,8 @@ describe('src', () => {
             },
             decl: ['b1'],
             levels: ['l1'],
-            tech: 'js',
+            tech: 'qq',
+            techMap: { qq: 'js' },
             result: ['l1/b1/b1.js', 'l1/b2/b2.js']
         });
     });
