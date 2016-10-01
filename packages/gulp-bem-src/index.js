@@ -51,6 +51,11 @@ function src(sources, decl, tech, options) {
 
     const config = options.config || bemConfig();
 
+    const techMap = Object.assign({}, options.techMap);
+    Object.keys(techMap)
+        .filter(t => !Array.isArray(techMap[t]))
+        .forEach(t => { techMap[t] = [techMap[t]]; });
+
     // Получаем слепок файловой структуры с уровней
     const introspectionP = Promise.resolve(config.levelMap ? config.levelMap() : {})
         .then(levelMap => {
@@ -119,7 +124,7 @@ function src(sources, decl, tech, options) {
 
     const fullfiledeclP = filedeclP
         // Преобразуем технологии зависимостей в декларации в технологии файловой системы
-        .then(fulldecl => _multiflyTechs(fulldecl, (options.techMap && options.techMap[tech]) || [tech]));
+        .then(fulldecl => _multiflyTechs(fulldecl, techMap));
 
     // Формируем упорядоченный список файлов по раскрытой декларации и интроспекции
     const orderedFilesPromise = Promise.all([introspectionP, fullfiledeclP])
@@ -221,9 +226,9 @@ function _buildIndex(list, hash) {
     }, {});
 }
 
-function _multiflyTechs(decl, techs) {
-    Array.isArray(techs) || (techs = [techs]);
+function _multiflyTechs(decl, techMap) {
     return decl.reduce((res, fileEntity) => {
+        const techs = techMap[fileEntity.tech] || (techMap[fileEntity.tech] = [fileEntity.tech]);
         techs.forEach(tech => res.push(Object.assign({}, fileEntity, {tech})));
         return res;
     }, []);
