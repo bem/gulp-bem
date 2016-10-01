@@ -71,8 +71,8 @@ module.exports = function(pattern, opts) {
                 .then(res => {
                     const decl = res[0];
                     const bemjson = res[1];
-                    decl && (bundle.decl = declNormalize(nodeEval(decl)));
-                    bemjson && (bundle.bemjson = nodeEval(bemjson));
+                    decl && (bundle.decl = declNormalize(nodeEval(decl, bemdeclFilename)));
+                    bemjson && (bundle.bemjson = nodeEval(bemjson, bemjsonFilename));
                 })
                 .then(() => output.push(new BemBundle(bundle)))
         })))
