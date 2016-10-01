@@ -1,19 +1,23 @@
 {
-	"name": "gulp-bem-i18n",
-	"version": "0.1.0",
-	"description": "BEM i18n gulp plugin",
-	"keywords": [
-		"gulpplugin",
-		"i18n",
-		"bem"
-	],
-	"homepage": "https://github.com/gulp-bem/gulp-bem-i18n",
-	"bugs": {
-		"url": "https://github.com/gulp-bem/gulp-bem-i18n/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/gulp-bem/gulp-bem-i18n.git"
-	},
-	"license": "MIT"
+  "name": "gulp-bem-i18n",
+  "version": "0.1.0",
+  "description": "BEM i18n gulp plugin",
+  "keywords": [
+    "gulpplugin",
+    "i18n",
+    "bem"
+  ],
+  "homepage": "https://github.com/gulp-bem/gulp-bem-i18n",
+  "bugs": {
+    "url": "https://github.com/gulp-bem/gulp-bem-i18n/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gulp-bem/gulp-bem-i18n.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.7.0",
+    "eslint-config-pedant": "^0.8.0"
+  }
 }
