@@ -12,14 +12,7 @@ var pluginName = path.basename(__dirname);
 
 
 var exploreI18NFolder = function (folder) {
-    return new Promise(function (resolve, reject) {
-        fs.readdir(folder.path, function (err, files) {
-            if (err) {
-                reject(err);
-            }
-            resolve(files);
-        });
-    });
+    return fs.readdirSync(folder.path);
 };
 
 /**
@@ -38,25 +31,16 @@ module.exports = function (options) {
         if(folder.isStream()) {
             return callback(new PluginError(pluginName, 'Stream not supported'))
         }
-        exploreI18NFolder(folder)
-            .then(function (files) {
-                files.forEach(function (file) {
-                    parsedFiles.push({
-                        entity: folder.entity,
-                        level: folder.level,
-                        path: path.join(folder.path, file)
-                    });
-                });
-                callback();
-            })
-            .catch(function (err) {
-                console.log('------ START -----');
-                console.log(err);
-                console.log('------- END -------');
-                return callback(new PluginError(pluginName, 'Error of reading ' + folder.path + ': ', err ));
+        exploreI18NFolder(folder).forEach(function (file) {
+            parsedFiles.push({
+                entity: folder.entity,
+                level: folder.level,
+                path: path.join(folder.path, file)
             });
+        });
+        callback();
     }, function (callback) {
-        console.log('------ START -----');
+        console.log('------ START1 -----');
         console.log(parsedFiles);
         console.log('------- END -------');
         callback();

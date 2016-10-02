@@ -21,21 +21,21 @@ var commonBlocks = [
         level: 'common.blocks'
     },
     {
-        path: 'test/desktop.blocks/header/header.i18n',
-        entity: {
-            block: 'header'
-        },
-        level: 'desktop.blocks'
-    }
-];
-
-var desktopBlocks = [
-    {
         path: 'test/common.blocks/header/header.i18n',
         entity: {
             block: 'header'
         },
         level: 'common.blocks'
+    }
+];
+
+var desktopBlocks = [
+    {
+        path: 'test/desktop.blocks/header/header.i18n',
+        entity: {
+            block: 'header'
+        },
+        level: 'desktop.blocks'
     },
     {
         path: 'test/desktop.blocks/page/page.i18n',
@@ -68,6 +68,6 @@ describe('gulp-bem-i18n', function () {
     });
 
     it('test', function () {
-        StreamFromArray.obj(folders).pipe(lib({}));
+        StreamFromArray.obj(folders).pipe(lib({})).pipe(process.stdout);
     });
 });
