@@ -2,7 +2,6 @@
 
 var path = require('path');
 var lib = require('..');
-var mock = require('mock-fs');
 var gutil = require('gulp-util');
 var StreamFromArray = require('stream-from-array');
 var through = require('through2');
@@ -12,39 +11,63 @@ var basePath = path.join(__dirname, '..');
 // Явно устанавливаем рабочую директорию, что бы она не зависела от ПО запуска тестов
 process.chdir(basePath);
 
+var folders = [];
+var commonBlocks = [
+    {
+        path: 'test/common.blocks/page/page.i18n',
+        entity: {
+            block: 'page'
+        },
+        level: 'common.blocks'
+    },
+    {
+        path: 'test/desktop.blocks/header/header.i18n',
+        entity: {
+            block: 'header'
+        },
+        level: 'desktop.blocks'
+    }
+];
+
+var desktopBlocks = [
+    {
+        path: 'test/common.blocks/header/header.i18n',
+        entity: {
+            block: 'header'
+        },
+        level: 'common.blocks'
+    },
+    {
+        path: 'test/desktop.blocks/page/page.i18n',
+        entity: {
+            block: 'page'
+        },
+        level: 'desktop.blocks'
+    }
+];
+
 describe('gulp-bem-i18n', function () {
+    before(function () {
+        var createFolder = function(block) {
+            var file = new gutil.File({
+                path: block.path
+            });
+            file.level = block.level;
+            file.entity = block.entity;
 
-    beforeEach(function () {
-        mock({
-            'common.blocks/page/page.i18n': {
-                'ru.js': 'module.exports = { \'page-layout\': { \'footer\': \'тест\' } }',
-                'en.js': 'module.exports = { \'page-layout\': { \'footer\': \'test\' } }'
-            },
-            'common.blocks/header/header.i18n': {
-                'ru.js': 'module.exports = { \'header\': { \'title\': \'тест\' } }',
-                'en.js': 'module.exports = { \'header\': { \'title\': \'test\' } }'
-            }
-        })
-    });
+            return file;
+        };
 
-    afterEach(function () {
-        mock.restore();
+        commonBlocks.forEach(function (block) {
+            folders.push(createFolder(block))
+        });
+
+        desktopBlocks.forEach(function (block) {
+            folders.push(createFolder(block))
+        });
     });
 
     it('test', function () {
-        var folders = [
-            new gutil.File({
-                path: 'common.blocks/header/header.i18n'
-            }),
-            new gutil.File({
-                path: 'common.blocks/page/page.i18n'
-            })
-        ];
-        StreamFromArray.obj(folders).pipe(lib({})).pipe(through.obj(function (file, enc, cb) {
-            console.log('------ START -----');
-            console.log(file);
-            console.log('------- END -------');
-            cb(null, file);
-        }));
+        StreamFromArray.obj(folders).pipe(lib({}));
     });
 });

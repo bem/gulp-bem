@@ -32,19 +32,20 @@ var exploreI18NFolder = function (folder) {
  */
 module.exports = function (options) {
     options = options || {};
+    var parsedFiles = [];
 
     return through.obj(function (folder, encoding, callback) {
-        var _this = this;
-
         if(folder.isStream()) {
             return callback(new PluginError(pluginName, 'Stream not supported'))
         }
         exploreI18NFolder(folder)
             .then(function (files) {
                 files.forEach(function (file) {
-                    _this.push(new gutil.File({
+                    parsedFiles.push({
+                        entity: folder.entity,
+                        level: folder.level,
                         path: path.join(folder.path, file)
-                    }));
+                    });
                 });
                 callback();
             })
@@ -54,5 +55,10 @@ module.exports = function (options) {
                 console.log('------- END -------');
                 return callback(new PluginError(pluginName, 'Error of reading ' + folder.path + ': ', err ));
             });
+    }, function (callback) {
+        console.log('------ START -----');
+        console.log(parsedFiles);
+        console.log('------- END -------');
+        callback();
     });
 };
