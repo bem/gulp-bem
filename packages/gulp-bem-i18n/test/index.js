@@ -4,7 +4,6 @@ var path = require('path');
 var lib = require('..');
 var gutil = require('gulp-util');
 var StreamFromArray = require('stream-from-array');
-var through = require('through2');
 
 var basePath = path.join(__dirname, '..');
 
@@ -68,6 +67,6 @@ describe('gulp-bem-i18n', function () {
     });
 
     it('test', function () {
-        StreamFromArray.obj(folders).pipe(lib({})).pipe(process.stdout);
+        StreamFromArray.obj(folders).pipe(lib({langs: ['ru']})).pipe(process.stdout);
     });
 });

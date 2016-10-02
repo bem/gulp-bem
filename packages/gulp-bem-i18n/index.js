@@ -4,15 +4,21 @@ var fs = require('fs');
 var path = require('path');
 var through = require('through2');
 var gutil = require('gulp-util');
-var lodash = require('lodash');
+var _ = require('lodash');
 
 
 var PluginError = gutil.PluginError;
 var pluginName = path.basename(__dirname);
 
 
-var exploreI18NFolder = function (folder) {
+var exploreI18NFolder = function(folder) {
     return fs.readdirSync(folder.path);
+};
+
+var getLangFormFile = function(file) {
+    var regex = /(.*)\/(.*)\.js$/;
+    var results = regex.exec(file);
+    return results[2];
 };
 
 /**
@@ -31,12 +37,20 @@ module.exports = function (options) {
         if(folder.isStream()) {
             return callback(new PluginError(pluginName, 'Stream not supported'))
         }
+
+        if(!options.langs) {
+            return callback(new PluginError(pluginName, 'Please specify languages'))
+        }
+
         exploreI18NFolder(folder).forEach(function (file) {
-            parsedFiles.push({
-                entity: folder.entity,
-                level: folder.level,
-                path: path.join(folder.path, file)
-            });
+            var fullFilePath = path.join(folder.path, file);
+            if(_.includes(options.langs, getLangFormFile(fullFilePath))) {
+                parsedFiles.push({
+                    entity: folder.entity,
+                    level: folder.level,
+                    path: fullFilePath
+                });
+            }
         });
         callback();
     }, function (callback) {
