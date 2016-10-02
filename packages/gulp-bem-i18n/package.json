@@ -16,7 +16,8 @@
     "url": "https://github.com/gulp-bem/gulp-bem-i18n.git"
   },
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "mocha"
   },
   "license": "MIT",
   "devDependencies": {
