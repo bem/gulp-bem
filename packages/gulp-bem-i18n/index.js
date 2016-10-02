@@ -20,6 +20,17 @@ var getLangFormFile = function(file) {
     return fileName.split('.')[0];
 };
 
+var keysetsToString = function(keysets, block) {
+    var mergedKeysets = _.reduce(keysets, function (result, keyset) {
+        var content = require(path.resolve(keyset.path));
+        result[block] = result[block] || {};
+        result[block] = Object.assign(result[block], content[block]);
+        return result;
+    }, {});
+
+    return 'module.exports = ' + JSON.stringify(mergedKeysets) + ';'
+};
+
 /**
  * BEM i18n gulp plugin
  *
@@ -30,7 +41,7 @@ var getLangFormFile = function(file) {
  */
 module.exports = function (options) {
     options = options || {};
-    var parsedFiles = [];
+    var parsedKeysets = [];
 
     return through.obj(function (folder, encoding, callback) {
         if(folder.isStream()) {
@@ -44,7 +55,7 @@ module.exports = function (options) {
         exploreI18NFolder(folder).forEach(function (file) {
             var fullFilePath = path.join(folder.path, file);
             if(_.includes(options.langs, getLangFormFile(fullFilePath))) {
-                parsedFiles.push({
+                parsedKeysets.push({
                     entity: folder.entity,
                     level: folder.level,
                     path: fullFilePath
@@ -54,18 +65,35 @@ module.exports = function (options) {
         callback();
     }, function (callback) {
         var combinedFilesByBlock = {};
-        _.map(parsedFiles, function (keyset) {
+        _.map(parsedKeysets, function (keyset) {
             var nameBlock = keyset.entity.block;
-            var path = keyset.path;
-            var lang = getLangFormFile(path);
+            var filePath = keyset.path;
+            var lang = getLangFormFile(filePath);
             if (!_.get(combinedFilesByBlock, [nameBlock, lang])) {
                 _.set(combinedFilesByBlock, [nameBlock, lang], []);
             }
-            combinedFilesByBlock[nameBlock][lang].push(path);
+            combinedFilesByBlock[nameBlock][lang].push(filePath);
         });
-        console.log('------ START -----');
-        console.log(combinedFilesByBlock);
-        console.log('------- END -------');
+
+        var keysetsByBlock = _.groupBy(parsedKeysets, function (keyset) {
+            return _.get(keyset, 'entity.block');
+        });
+
+        var result = {};
+
+        _.forEach(keysetsByBlock, function (keysets, block) {
+            var keysetsByLanguage = _.groupBy(keysets, function (keyset) {
+                return getLangFormFile(keyset.path);
+            });
+            result[block] = {};
+
+            _.forEach(keysetsByLanguage, function (keyset, lang) {
+                result[block][lang] = keysetsToString(keyset, block);
+            });
+        });
+
+        this.push(result);
+
         callback();
     });
 };
