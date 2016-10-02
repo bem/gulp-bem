@@ -174,6 +174,7 @@ function filesToStream(filesPromise, options) {
                 vf.name = path.basename(file.path).split('.')[0];
                 vf.tech = file.tech;
                 vf.level = file.level;
+                vf.entity = file.entity;
 
                 stream.push(vf);
                 process.nextTick(next);
