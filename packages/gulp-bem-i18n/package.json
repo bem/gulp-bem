@@ -30,6 +30,6 @@
   "dependencies": {
     "gulp-util": "^3.0.7",
     "through2": "^2.0.1",
-    "vinyl": "^2.0.0"
+    "vow": "^0.4.12"
   }
 }
