@@ -4,7 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var through = require('through2');
 var gutil = require('gulp-util');
-var Promise = require('vow').Promise;
+var lodash = require('lodash');
 
 
 var PluginError = gutil.PluginError;
@@ -40,7 +40,7 @@ module.exports = function (options) {
         });
         callback();
     }, function (callback) {
-        console.log('------ START1 -----');
+        console.log('------ START -----');
         console.log(parsedFiles);
         console.log('------- END -------');
         callback();
