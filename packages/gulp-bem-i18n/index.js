@@ -16,9 +16,8 @@ var exploreI18NFolder = function(folder) {
 };
 
 var getLangFormFile = function(file) {
-    var regex = /(.*)\/(.*)\.js$/;
-    var results = regex.exec(file);
-    return results[2];
+    var fileName = path.basename(file);
+    return fileName.split('.')[0];
 };
 
 /**
