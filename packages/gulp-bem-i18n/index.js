@@ -53,8 +53,18 @@ module.exports = function (options) {
         });
         callback();
     }, function (callback) {
+        var combinedFilesByBlock = {};
+        _.map(parsedFiles, function (keyset) {
+            var nameBlock = keyset.entity.block;
+            var path = keyset.path;
+            var lang = getLangFormFile(path);
+            if (!_.get(combinedFilesByBlock, [nameBlock, lang])) {
+                _.set(combinedFilesByBlock, [nameBlock, lang], []);
+            }
+            combinedFilesByBlock[nameBlock][lang].push(path);
+        });
         console.log('------ START -----');
-        console.log(parsedFiles);
+        console.log(combinedFilesByBlock);
         console.log('------- END -------');
         callback();
     });

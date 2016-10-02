@@ -67,6 +67,6 @@ describe('gulp-bem-i18n', function () {
     });
 
     it('test', function () {
-        StreamFromArray.obj(folders).pipe(lib({langs: ['ru']})).pipe(process.stdout);
+        StreamFromArray.obj(folders).pipe(lib({langs: ['ru', 'en']})).pipe(process.stdout);
     });
 });
