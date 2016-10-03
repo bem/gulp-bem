@@ -114,7 +114,8 @@ function src(sources, decl, tech, options) {
             stream.push(new File({
                 name: '',
                 path: 'name.deps.js',
-                contents: new Buffer(require('util').inspect(fulldecl.map(f), {depth: null, breakLength: 100}))
+                contents: new Buffer(require('util').inspect(fulldecl.map(f),
+                    {depth: null, breakLength: 100, maxArrayLength: null}))
             }));
             stream.push(null);
         })
