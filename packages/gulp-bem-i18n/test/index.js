@@ -47,6 +47,9 @@ var desktopBlocks = [
 ];
 
 describe('gulp-bem-i18n', function () {
+
+    require('./lib/util');
+
     before(function () {
         var createFolder = function(block) {
             var file = new gutil.File({
@@ -69,7 +72,7 @@ describe('gulp-bem-i18n', function () {
 
     it('test', function () {
         StreamFromArray.obj(folders).pipe(lib({langs: ['ru', 'en']})).pipe(through.obj(function (result) {
-            console.log('------ START1 -----');
+            console.log('------ START -----');
             console.log(result);
             console.log('------- END -------');
         }));
