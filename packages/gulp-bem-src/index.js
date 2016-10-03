@@ -65,7 +65,8 @@ function src(sources, decl, tech, options) {
             intro.on('data', () => { hasSomeData = true; });
             return new Promise((resolve, reject) => {
                 setTimeout(() => hasSomeData ||
-                    reject('bem-walk timeout. See also https://github.com/bem-sdk/bem-walk/issues/76'), 1000);
+                    reject('Looks like there are no files. ' +
+                        'See also https://github.com/bem-sdk/bem-walk/issues/76'), 1000);
                 toArray(intro).then(resolve).catch(reject);
             });
         })
