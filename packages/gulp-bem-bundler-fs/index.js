@@ -17,12 +17,6 @@ module.exports = function(pattern, opts) {
         declVersion: 'v2'
     }, opts);
 
-    const _declNormalize = decl.normalizer(opts.declVersion);
-    let declNormalize = _declNormalize;
-    if (opts.declVersion === 'v2') {
-        declNormalize = data => _declNormalize(data).map(e => (e.entity.tech = e.tech, e.entity));
-    }
-
     const output = new Readable({
         objectMode: true,
         read: function() {}
@@ -65,13 +59,14 @@ module.exports = function(pattern, opts) {
 
             return Promise
                 .all([
-                    bemdeclFilename && fs.readFile(bemdeclFilename, 'utf8'),
+                    bemdeclFilename && decl.load(bemdeclFilename),
                     bemjsonFilename && fs.readFile(bemjsonFilename, 'utf8')
                 ])
                 .then(res => {
                     const decl = res[0];
                     const bemjson = res[1];
-                    decl && (bundle.decl = declNormalize(nodeEval(decl, bemdeclFilename)));
+
+                    decl && (bundle.decl = decl);
                     bemjson && (bundle.bemjson = nodeEval(bemjson, bemjsonFilename));
                 })
                 .then(() => output.push(new BemBundle(bundle)))

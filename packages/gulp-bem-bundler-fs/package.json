@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "bem-bundle": "^0.2.0",
-    "bem-decl": "^0.2.2",
+    "bem-decl": "^0.3.0",
     "globby": "^6.0.0",
     "mz": "^2.4.0",
     "node-eval": "^1.0.3"
