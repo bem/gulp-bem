@@ -14,7 +14,7 @@ module.exports = function(pattern, opts) {
         // RE matching for 'blocks', 'common.blocks', 'anything-else.blocks',
         // but not 'vodka.putin.blocks', 'bala/laika.blocks'.
         levelPattern: /([^\/\.]+\.|^)blocks$/,
-        declVersion: 'v2'
+        preferBemjson: false
     }, opts);
 
     const output = new Readable({
@@ -66,7 +66,7 @@ module.exports = function(pattern, opts) {
                     const decl = res[0];
                     const bemjson = res[1];
 
-                    decl && (bundle.decl = decl);
+                    decl && !opts.preferBemjson && (bundle.decl = decl);
                     bemjson && (bundle.bemjson = nodeEval(bemjson, bemjsonFilename));
                 })
                 .then(() => output.push(new BemBundle(bundle)))
