@@ -16,14 +16,13 @@ module.exports = enb.buildFlow.create()
     .builder(function (fileList, dirList) {
         const node = this.node;
         const root = node.getRootDir();
-        const base = node.getDir();
 
         const files = fileList.getBySuffix(this._suffixes);
         const dirs = dirList.getBySuffix(this._suffixes);
-        console.log(this._suffixes)
+
         const toVinyl = (file) => ({
             cwd: root,
-            base: base,
+            base: root,
             path: file.fullname
         });
 
