@@ -29,7 +29,15 @@ const levels = [
     'desktop.blocks'
 ];
 
-const jsFiles = require(`${fixturesDir}/project-stub-files`).js.map(file => new Vinyl(file));
+const jsFiles = require(`${fixturesDir}/project-stub-files`).js.map(data => {
+    const file = {
+        cwd: path.join(__dirname, data.cwd),
+        base: path.join(__dirname, data.base),
+        path: path.join(__dirname, data.path)
+    };
+
+    return new Vinyl(file);
+});
 
 test('should scan `project-stub`', async t => {
     const stream = src({
