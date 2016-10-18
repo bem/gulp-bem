@@ -11,16 +11,16 @@ gulp-enb-src
 [npm-img]:      https://img.shields.io/npm/v/gulp-enb-src.svg
 
 [travis]:       https://travis-ci.org/gulp-bem/gulp-enb-src
-[test-img]:     https://img.shields.io/travis/gulp-bem/gulp-enb-src
+[test-img]:     https://img.shields.io/travis/gulp-bem/gulp-enb-src.svg
 
 [appveyor]:     https://ci.appveyor.com/project/blond/gulp-enb-src
-[appveyor-img]: http://img.shields.io/appveyor/ci/blond/gulp-enb-src
+[appveyor-img]: http://img.shields.io/appveyor/ci/blond/gulp-enb-src.svg
 
 [coveralls]:    https://coveralls.io/r/gulp-bem/gulp-enb-src
-[coverage-img]: https://img.shields.io/coveralls/gulp-bem/gulp-enb-src
+[coverage-img]: https://img.shields.io/coveralls/gulp-bem/gulp-enb-src.svg
 
 [david]:        https://david-dm.org/gulp-bem/gulp-enb-src
-[david-img]:    http://img.shields.io/david/gulp-bem/gulp-enb-src
+[david-img]:    http://img.shields.io/david/gulp-bem/gulp-enb-src.svg
 
 Helper to get sources with ENB.
 
