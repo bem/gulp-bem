@@ -1,171 +1,46 @@
 module.exports = {
-    js: [{
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/i-bem/i-bem.vanilla.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/i-bem/__internal/i-bem__internal.vanilla.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/inherit/inherit.vanilla.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/identify/identify.vanilla.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/next-tick/next-tick.vanilla.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/objects/objects.vanilla.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/functions/functions.vanilla.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/events/events.vanilla.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/i-bem/__dom/i-bem__dom.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/jquery/jquery.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/jquery/__config/jquery__config.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/desktop.blocks/jquery/__config/jquery__config.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/desktop.blocks/ua/ua.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/dom/dom.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/i-bem/__dom/_init/i-bem__dom_init.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/link/link.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/jquery/__event/_type/jquery__event_type_pointernative.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/keyboard/__codes/keyboard__codes.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/control/control.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/desktop.blocks/control/control.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/menu/menu.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/menu-item/menu-item.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/input/input.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/desktop.blocks/input/input.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/tick/tick.vanilla.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/idle/idle.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/button/button.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/radio-group/radio-group.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/radio/radio.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/checkbox/checkbox.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/dropdown/dropdown.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/popup/popup.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/functions/__throttle/functions__throttle.vanilla.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/popup/_autoclosable/popup_autoclosable.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/popup/_target/popup_target.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/select/select.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/strings/__escape/strings__escape.vanilla.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/i-bem/__dom/_init/i-bem__dom_init_auto.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/loader/_type/loader_type_js.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-core/common.blocks/jquery/__event/_type/jquery__event_type_pointerpressrelease.js'
-    }, {
-        cwd: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles',
-        base: 'fixtures/node_modules/bem-project-stub/.enb/tmp/enb-src-bundles/d8eb46bbbd08f5008fc5794b1a7f0fe5',
-        path: 'fixtures/node_modules/bem-project-stub/libs/bem-components/common.blocks/popup/_target/popup_target_anchor.js'
-    }]
+    js: [
+        'libs/bem-core/common.blocks/i-bem/i-bem.vanilla.js',
+        'libs/bem-core/common.blocks/i-bem/__internal/i-bem__internal.vanilla.js',
+        'libs/bem-core/common.blocks/inherit/inherit.vanilla.js',
+        'libs/bem-core/common.blocks/identify/identify.vanilla.js',
+        'libs/bem-core/common.blocks/next-tick/next-tick.vanilla.js',
+        'libs/bem-core/common.blocks/objects/objects.vanilla.js',
+        'libs/bem-core/common.blocks/functions/functions.vanilla.js',
+        'libs/bem-core/common.blocks/events/events.vanilla.js',
+        'libs/bem-core/common.blocks/i-bem/__dom/i-bem__dom.js',
+        'libs/bem-core/common.blocks/jquery/jquery.js',
+        'libs/bem-core/common.blocks/jquery/__config/jquery__config.js',
+        'libs/bem-core/desktop.blocks/jquery/__config/jquery__config.js',
+        'libs/bem-core/desktop.blocks/ua/ua.js',
+        'libs/bem-core/common.blocks/dom/dom.js',
+        'libs/bem-core/common.blocks/i-bem/__dom/_init/i-bem__dom_init.js',
+        'libs/bem-components/common.blocks/link/link.js',
+        'libs/bem-core/common.blocks/jquery/__event/_type/jquery__event_type_pointerclick.js',
+        'libs/bem-core/common.blocks/jquery/__event/_type/jquery__event_type_pointernative.js',
+        'libs/bem-core/common.blocks/keyboard/__codes/keyboard__codes.js',
+        'libs/bem-components/common.blocks/control/control.js',
+        'libs/bem-components/desktop.blocks/control/control.js',
+        'libs/bem-components/common.blocks/menu/menu.js',
+        'libs/bem-components/common.blocks/menu-item/menu-item.js',
+        'libs/bem-components/common.blocks/input/input.js',
+        'libs/bem-components/desktop.blocks/input/input.js',
+        'libs/bem-core/common.blocks/tick/tick.vanilla.js',
+        'libs/bem-core/common.blocks/idle/idle.js',
+        'libs/bem-components/common.blocks/button/button.js',
+        'libs/bem-components/common.blocks/radio-group/radio-group.js',
+        'libs/bem-components/common.blocks/radio/radio.js',
+        'libs/bem-components/common.blocks/checkbox/checkbox.js',
+        'libs/bem-components/common.blocks/dropdown/dropdown.js',
+        'libs/bem-components/common.blocks/popup/popup.js',
+        'libs/bem-core/common.blocks/functions/__throttle/functions__throttle.vanilla.js',
+        'libs/bem-components/common.blocks/popup/_autoclosable/popup_autoclosable.js',
+        'libs/bem-components/common.blocks/popup/_target/popup_target.js',
+        'libs/bem-components/common.blocks/select/select.js',
+        'libs/bem-core/common.blocks/strings/__escape/strings__escape.vanilla.js',
+        'libs/bem-core/common.blocks/i-bem/__dom/_init/i-bem__dom_init_auto.js',
+        'libs/bem-core/common.blocks/loader/_type/loader_type_js.js',
+        'libs/bem-core/common.blocks/jquery/__event/_type/jquery__event_type_pointerpressrelease.js',
+        'libs/bem-components/common.blocks/popup/_target/popup_target_anchor.js'
+    ]
 };

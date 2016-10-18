@@ -7,7 +7,6 @@ const bemjsonToDecl = require('bemjson-to-decl').convert;
 const bemDecl = require('bem-decl');
 const bemDeclConvert = require('bem-decl/lib/convert');
 const toArray = require('stream-to-array');
-const Vinyl = require('vinyl');
 
 const src = require('../index');
 
@@ -29,14 +28,10 @@ const levels = [
     'desktop.blocks'
 ];
 
-const jsFiles = require(`${fixturesDir}/project-stub-files`).js.map(data => {
-    const file = {
-        cwd: path.join(__dirname, data.cwd),
-        base: path.join(__dirname, data.base),
-        path: path.join(__dirname, data.path)
-    };
+const jsPaths = require(`${fixturesDir}/project-stub-files`).js.map(filename => {
+    const fullname = path.join(projectStubDir, filename);
 
-    return new Vinyl(file);
+    return path.normalize(fullname);
 });
 
 test('should scan `project-stub`', async t => {
@@ -49,6 +44,7 @@ test('should scan `project-stub`', async t => {
     });
 
     const files = await toArray(stream);
+    const paths = files.map(file => file.path);
 
-    t.deepEqual(files, jsFiles);
+    t.deepEqual(paths, jsPaths);
 });
