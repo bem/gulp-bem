@@ -13,8 +13,8 @@ gulp-enb-src
 [travis]:       https://travis-ci.org/gulp-bem/gulp-enb-src
 [test-img]:     https://img.shields.io/travis/gulp-bem/gulp-enb-src
 
-[appveyor]:     https://ci.appveyor.com/project/gulp-bem/gulp-enb-src
-[appveyor-img]: http://img.shields.io/appveyor/ci/gulp-bem/gulp-enb-src
+[appveyor]:     https://ci.appveyor.com/project/blond/gulp-enb-src
+[appveyor-img]: http://img.shields.io/appveyor/ci/blond/gulp-enb-src
 
 [coveralls]:    https://coveralls.io/r/gulp-bem/gulp-enb-src
 [coverage-img]: https://img.shields.io/coveralls/gulp-bem/gulp-enb-src
