@@ -7,7 +7,7 @@ const bemjsonToDecl = require('bemjson-to-decl').convert;
 const bemDecl = require('bem-decl');
 const bemDeclConvert = require('bem-decl/lib/convert');
 const toArray = require('stream-to-array');
-const Vinyl = require('Vinyl');
+const Vinyl = require('vinyl');
 
 const src = require('../index');
 
