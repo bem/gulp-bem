@@ -1,0 +1,54 @@
+{
+  "name": "gulp-enb-src",
+  "version": "0.0.0",
+  "description": "Helper to get sources with ENB",
+  "license": "MIT",
+  "repository": "gulp-bem/gulp-enb-src",
+  "author": "Andrew Abramov <mail@blond.im> (github.com/blond)",
+  "keywords": [
+    "gulp",
+    "enb",
+    "bem",
+    "src",
+    "levels",
+    "decl",
+    "tech",
+    "sources",
+    "files",
+    "vinyl",
+    "stream"
+  ],
+  "main": "index.js",
+  "files": [
+    "lib/**",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">= 4.0"
+  },
+  "dependencies": {
+    "array-includes": "3.0.2",
+    "enb": "1.4.1",
+    "enb-bem-techs": "2.2.1",
+    "es6-promisify": "5.0.0",
+    "mkdirp": "0.5.1",
+    "vinyl": "2.0.0"
+  },
+  "devDependencies": {
+    "ava": "^0.16.0",
+    "bem-decl": "^0.3.0",
+    "bemjson-to-decl": "^1.0.1",
+    "coveralls": "^2.11.9",
+    "eslint": "^3.6.0",
+    "eslint-config-pedant": "^0.8.0",
+    "nyc": "^8.1.0",
+    "stream-to-array": "^2.3.0"
+  },
+  "scripts": {
+    "pretest": "eslint .",
+    "test": "npm run test:fixtures && nyc ava",
+    "test:fixtures": "cd test/fixtures && npm i",
+    "test:project-stub": "npm run test:fixtures && ava",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+  }
+}

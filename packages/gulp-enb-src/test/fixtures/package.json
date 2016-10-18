@@ -1,0 +1,7 @@
+{
+  "name": "gulp-enb-src-fixtures",
+  "private": true,
+  "devDependencies": {
+    "bem-project-stub": "git://github.com/bem/project-stub.git#v1.6.0"
+  }
+}
