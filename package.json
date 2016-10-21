@@ -33,7 +33,7 @@
     "bem-xjst": "^6.5.4",
     "gulp-util": "^3.0.7",
     "isstream": "^0.1.2",
-    "node-eval": "^1.0.3",
+    "node-eval": "^1.1.0",
     "stream-to-array": "^2.3.0",
     "through2": "^2.0.1",
     "vinyl": "^1.2.0"
