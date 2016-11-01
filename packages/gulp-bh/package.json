@@ -10,7 +10,7 @@
   "author": "Vasiliy Loginevskiy <yeti.or@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": ">=0.10"
+    "node": ">= 4"
   },
   "repository": {
     "type": "git",
