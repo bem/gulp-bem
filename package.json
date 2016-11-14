@@ -30,7 +30,7 @@
     "test": "mocha --bail --colors --reporter spec --ui bdd test"
   },
   "dependencies": {
-    "bem-xjst": "^6.5.4",
+    "bem-xjst": "^7.5.0",
     "gulp-util": "^3.0.7",
     "isstream": "^0.1.2",
     "node-eval": "^1.0.3",
