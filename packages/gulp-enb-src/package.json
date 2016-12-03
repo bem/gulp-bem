@@ -29,7 +29,7 @@
   "dependencies": {
     "array-includes": "3.0.2",
     "enb": "1.5.1",
-    "enb-bem-techs": "2.2.1",
+    "enb-bem-techs": "2.2.2",
     "es6-promisify": "5.0.0",
     "mkdirp": "0.5.1",
     "vinyl": "2.0.1"
