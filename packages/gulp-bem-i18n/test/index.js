@@ -70,11 +70,12 @@ describe('gulp-bem-i18n', function () {
         });
     });
 
-    it('test', function () {
+    it('test', function (done) {
         StreamFromArray.obj(folders).pipe(lib({langs: ['ru', 'en']})).pipe(through.obj(function (result) {
             console.log('------ START -----');
             console.log(result);
             console.log('------- END -------');
+            done();
         }));
     });
 });
