@@ -96,7 +96,7 @@ module.exports.toHtml = function(templatesStream) {
     }
 
     tryCatch(function () {
-      return bemjsonFile.data || (bemjsonFile.data = _eval(String(bemjsonFile.contents)));
+      return bemjsonFile.data || (bemjsonFile.data = _eval(String(bemjsonFile.contents), bemjsonFile.path));
     }, function (err) {
       callback(new PluginError(pluginName, 'Error at evaluating bemjson: ' + err));
     });
