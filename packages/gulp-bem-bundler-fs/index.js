@@ -9,11 +9,17 @@ const nodeEval = require('node-eval');
 const decl = require('bem-decl');
 const BemBundle = require('bem-bundle');
 
+/**
+ *
+ * @param {string} pattern
+ * @param {object} opts
+ * @param {string[]} opts.levels        List of additional levels relative to the bundle root folder
+ * @param {boolean} opts.preferBemjson
+ * @returns {module:stream/Readable}
+ */
 module.exports = function(pattern, opts) {
     opts = Object.assign({
-        // RE matching for 'blocks', 'common.blocks', 'anything-else.blocks',
-        // but not 'vodka.putin.blocks', 'bala/laika.blocks'.
-        levelPattern: /([^\/\.]+\.|^)blocks$/,
+        levels: [], //
         preferBemjson: false
     }, opts);
 
@@ -45,17 +51,11 @@ module.exports = function(pattern, opts) {
             bundle = Object.assign({
                 name: path.basename(bundle.dirname),
                 path: bundle.dirname + path.sep + '.',
-                levels: []
+                levels: opts.levels.map(level => path.join(bundle.dirname, level))
             }, bundle);
-
-            const subLevels = bundle.files.filter(f => f.isDirectory && ~f.path.search(opts.levelPattern));
 
             const bemjsonFilename = _pathToBestMatched(bundle, 'bemjson.js');
             const bemdeclFilename = _pathToBestMatched(bundle, 'bemdecl.js');
-
-            if (subLevels.length) {
-                bundle.levels.concat(subLevels.map(file => file.path));
-            }
 
             return Promise
                 .all([

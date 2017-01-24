@@ -2,7 +2,7 @@
 
 const bundler = require('./index');
 
-var stream = bundler('./fixtures/bundles/*');
+var stream = bundler('./fixtures/bundles/*', { levels: ['blocks/wefwef'] });
 
 stream.on('data', function (data) {
     console.log('data: ', data);
