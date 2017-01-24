@@ -1,0 +1,33 @@
+{
+  "name": "gulp-bem-bundler-merged",
+  "version": "0.0.1",
+  "description": "",
+  "license": "MIT",
+  "repository": "gulp-bem/gulp-bem-bundler-merged",
+  "keywords": [
+    "gulp",
+    "bem",
+    "bundler",
+    "merged"
+  ],
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "engines": {
+    "node": ">= 4.0"
+  },
+  "dependencies": {
+    "@bem/bundle": "^0.2.2",
+    "bem-decl": "^0.3.0",
+    "through2": "^2.0.3"
+  },
+  "devDependencies": {
+    "eslint": "2.6.0",
+    "eslint-config-pedant": "0.1.1"
+  },
+  "scripts": {
+    "test": "npm run lint",
+    "lint": "eslint ."
+  }
+}
