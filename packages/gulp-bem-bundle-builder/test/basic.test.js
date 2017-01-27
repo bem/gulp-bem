@@ -26,7 +26,7 @@ test.serial('should generate js/css files for bemBundle', t => {
       new BemBundle({
         path: 'bundles/bundle2/bundle2.bemdecl.js',
         decl: [{block: 'b'}],
-        levels: ['bundle-blocks']
+        levels: ['bundles/bundle2/bundle-blocks']
       })
     ])
     // Stream<BemBundle>

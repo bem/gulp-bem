@@ -43,7 +43,7 @@ module.exports = function(opts) {
             bundle.dirname = path.dirname(bundle.path);
 
             const levels = [].concat(opts.levels)
-                .concat(bundle.levels.map(level => path.relative(process.cwd(), path.join(bundle.dirname, level))))
+                .concat(bundle.levels.map(level => path.relative(process.cwd(), level)))
                 .filter(Boolean);
 
             const targetDataBuffer = {};
