@@ -7,7 +7,7 @@ const Readable = require('stream').Readable;
 const globby = require('globby');
 const nodeEval = require('node-eval');
 const decl = require('bem-decl');
-const BemBundle = require('bem-bundle');
+const BemBundle = require('@bem/bundle');
 
 /**
  *
