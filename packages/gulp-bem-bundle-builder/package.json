@@ -28,7 +28,7 @@
     "lib"
   ],
   "dependencies": {
-    "bem-bundle": "^0.2.0",
+    "@bem/bundle": "^0.2.0",
     "gulp-bem-src": "0.0.2",
     "merge2": "^1.0.2",
     "mz": "^2.4.0",

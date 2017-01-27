@@ -9,7 +9,7 @@ const _eval = require('node-eval');
 const merge = require('merge2');
 const gulpBemSrc = require('gulp-bem-src');
 const thru = require('through2');
-const BemBundle = require('bem-bundle');
+const BemBundle = require('@bem/bundle');
 const File = require('vinyl');
 
 /**
