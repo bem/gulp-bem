@@ -2,7 +2,8 @@
 
 var lib = require('..');
 var expect = require('expect.js');
-var gutil = require('gulp-util');
+var File = require('vinyl');
+var intoStream = require('into-stream');
 
 describe('toHtml', function () {
 
@@ -16,17 +17,15 @@ describe('toHtml', function () {
             .on('error', done)
             .on('end', done);
 
-        res.write(new gutil.File({
+        intoStream.obj([new File({
             path: 'index.bemjson.js',
             contents: new Buffer('module.exports = { block: \'page\' }')
-        }));
-        res.end();
+        })]).pipe(res);
 
-        bemhtmlStream.write(new gutil.File({
+        intoStream.obj([new File({
             path: 'page.bemhtml.js',
             contents: new Buffer('block(\'page\')(tag()(\'h1\'), content()(\'Hello, world!\'));')
-        }));
-        bemhtmlStream.end();
+        })]).pipe(bemhtmlStream);
 
     });
 });
