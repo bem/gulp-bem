@@ -27,7 +27,8 @@
   ],
   "scripts": {
     "pretest": "eslint *.js test",
-    "test": "mocha --bail --colors --reporter spec --ui bdd test"
+    "test": "nyc mocha",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
     "bem-xjst": "^8.4.0",
@@ -39,10 +40,12 @@
     "vinyl": "^2.0.1"
   },
   "devDependencies": {
+    "coveralls": "^2.11.16",
     "eslint": "^3.10.2",
     "eslint-config-pedant": "^0.8.0",
     "expect.js": "^0.3.1",
     "into-stream": "^3.1.0",
-    "mocha": "^2.1.0"
+    "mocha": "^2.1.0",
+    "nyc": "^10.1.2"
   }
 }
