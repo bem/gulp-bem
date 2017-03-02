@@ -26,9 +26,11 @@
     "Alexey Yaroshevich <zxqfox@gmail.com>"
   ],
   "scripts": {
-    "pretest": "eslint *.js test",
-    "test": "nyc mocha",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "pretest": "npm run lint",
+    "test": "npm run specs",
+    "specs": "mocha",
+    "cover": "nyc mocha",
+    "lint": "eslint ."
   },
   "dependencies": {
     "bem-xjst": "^8.4.0",
@@ -40,7 +42,6 @@
     "vinyl": "^2.0.1"
   },
   "devDependencies": {
-    "coveralls": "^2.11.16",
     "eslint": "^3.10.2",
     "eslint-config-pedant": "^0.8.0",
     "expect.js": "^0.3.1",
