@@ -24,11 +24,11 @@ describe('src', () => {
 
     it('should return files for entities in decl without deps', function() {
         return checkSrc({
-            files: ['l1/b2/b2.js', 'l2/b1/b1.js', 'l2/b1/b1.css', 'l1/b1/b1.js', 'l2/b1/b1.es'],
+            files: ['l1/b2/b2.js', 'l1/b1/b1.es', 'l2/b1/b1.js', 'l2/b1/b1.css', 'l1/b1/b1.js', 'l2/b1/b1.es'],
             decl: ['b1', 'b2'],
             levels: ['l1', 'l2'],
             tech: 'js',
-            result: ['l1/b1/b1.js', 'l2/b1/b1.js', 'l2/b1/b1.es', 'l1/b2/b2.js'],
+            result: ['l1/b1/b1.js', 'l1/b1/b1.es', 'l2/b1/b1.js', 'l2/b1/b1.es', 'l1/b2/b2.js'],
             techMap: { js: ['js', 'es'] },
             read: true
         });

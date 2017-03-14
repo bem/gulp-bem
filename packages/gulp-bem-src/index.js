@@ -124,17 +124,14 @@ function src(sources, decl, tech, options) {
         return stream;
     }
 
-    const fullfiledeclP = filedeclP
-        // Преобразуем технологии зависимостей в декларации в технологии файловой системы
-        .then(fulldecl => _multiflyTechs(fulldecl, techMap));
-
     // Формируем упорядоченный список файлов по раскрытой декларации и интроспекции
-    const orderedFilesPromise = Promise.all([introspectionP, fullfiledeclP])
+    const orderedFilesPromise = Promise.all([introspectionP, filedeclP])
         .then(data => {
             const introspection = data[0];
             const filedecl = data[1];
 
-            return harvest(introspection, sources, filedecl);
+            // Преобразуем технологии зависимостей в декларации в технологии файловой системы
+            return harvest({introspection, levels: sources, decl: filedecl, techMap});
         });
 
     // Читаем файлы из списка в поток
@@ -199,40 +196,65 @@ function filesToStream(filesPromise, options) {
 }
 
 /**
- * @param {Array<{entity: BemEntityName, level: String, tech: String, path: String}>} introspection - unordered file-entities list
- * @param {String[]} levels - ordered levels' paths list
- * @param {Tenorok[]} decl - resolved and ordered declaration
+ * @param {Object} opts - Options for harvester
+ * @param {Array<{entity: BemEntityName, level: String, tech: String, path: String}>} opts.introspection - unordered file-entities list
+ * @param {String[]} opts.levels - ordered levels' paths list
+ * @param {Object<String, String[]>} [opts.techMap] - deps techs to file techs mapper
+ * @param {BemCell[]} opts.decl - resolved and ordered declaration
  * @returns {Array<{entity: BemEntityName, level: String, tech: String, path: String}>} - resulting ordered file-entities list
  */
-function harvest(introspection, levels, decl/*: Array<{entity, tech}>*/) {
-    const hash = fileEntity => `${fileEntity.entity.id}.${fileEntity.tech}`;
-    const declIndex = _buildIndex(decl, hash);
-
-    const entityInIndex = file => declIndex[hash(file)] !== undefined;
-    return introspection
-        .filter(entityInIndex)
-        .filter(file => levels.indexOf(file.level) !== -1)
-        .sort((f1, f2) => hash(f1) === hash(f2)
-            ? levels.indexOf(f1.level) - levels.indexOf(f2.level)
-            : declIndex[hash(f1)] - declIndex[hash(f2)]);
-}
-
-/**
- * @param {Array<{entity: Tenorok, tech: String}>} list - List of tenoroks
- * @param {Function} hash - Hashing function
- * @returns {Object<String, Number>} - Entity id to sort order
- */
-function _buildIndex(list, hash) {
-    return list.reduce((res, fileEntity, idx) => {
-        res[hash(fileEntity)] = idx;
+function harvest(opts) {
+    const declIndex = opts.decl.reduce((res, cell, idx) => {
+        res[cell.entity.id] || (res[cell.entity.id] = {});
+        res[cell.entity.id][cell.tech] = idx;
         return res;
     }, {});
-}
 
-function _multiflyTechs(decl, techMap) {
-    return decl.reduce((res, fileEntity) => {
-        const techs = techMap[fileEntity.tech] || (techMap[fileEntity.tech] = [fileEntity.tech]);
-        techs.forEach(tech => res.push(Object.assign({}, fileEntity, {tech})));
+    const levelsPos = opts.levels.reduce((res, level, idx) => { res[level] = idx; return res; }, {});
+    const techMap = opts.techMap || {};
+    const fileTechToDep = Object.keys(techMap || {}).reduce((res, depTech) => {
+        Array.isArray(techMap[depTech]) || (techMap[depTech] = [techMap[depTech]]);
+        techMap[depTech].forEach(fileTech => { res[fileTech] = depTech; });
         return res;
-    }, []);
+    }, {});
+
+    const res = [];
+    for (const file of opts.introspection) {
+        if (file.tech && !fileTechToDep[file.tech] && !techMap[file.tech]) {
+            techMap[file.tech] = [file.tech];
+            fileTechToDep[file.tech] = file.tech;
+        }
+
+        // Skip files with unwanted technologies
+        const fileTech = fileTechToDep[file.tech];
+        if (!fileTech) {
+            continue;
+        }
+
+        // … and files that does not exist in declaration
+        if (Object(declIndex[file.entity.id])[fileTech] === undefined) {
+            continue;
+        }
+
+        // … and files from other levels
+        if (levelsPos[file.level] === undefined) {
+            continue;
+        }
+
+        res.push(file);
+    }
+
+    const techPos = Object.keys(techMap).reduce((_res, depTech) => {
+        techMap[depTech].forEach((fileTech, idx) => { _res[fileTech] = idx });
+        return _res;
+    }, {});
+
+    // Sort in the right order: cell.entity position in declaration,
+    return res.sort((f1, f2) => {
+        const f1DepTech = fileTechToDep[f1.tech];
+        const f2DepTech = fileTechToDep[f2.tech];
+        return f1.entity.id === f2.entity.id && f1DepTech === f2DepTech
+            ? (levelsPos[f1.level] - levelsPos[f2.level]) || (techPos[f1.tech] - techPos[f2.tech])
+            : declIndex[f1.entity.id][f1DepTech] - declIndex[f2.entity.id][f2DepTech];
+    });
 }

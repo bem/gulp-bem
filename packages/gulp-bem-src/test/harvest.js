@@ -51,17 +51,47 @@ it('should filter introspection and sort by level for few declarations', functio
         result: ['l1/b1/b1.js', 'l3/b2/b2.css', 'l2/b2/b2.css', 'l1/b2/b2.css', 'l4/b2/b2.css', 'l2/b3/b3.js']
     });
 });
+
+it('should resolve techs usign techMap with right order', function() {
+    checkHarvest({
+        files: ['l1/b1/b1.js', 'l2/b1/b1.vanilla.js', 'l3/b1/b1.js', 'l4/b1/b1.vanilla.js'],
+        levels: ['l3', 'l2', 'l1', 'l4'],
+        decl: ['b1.js'],
+        techMap: {js: ['js', 'vanilla.js']},
+        result: ['l3/b1/b1.js', 'l2/b1/b1.vanilla.js', 'l1/b1/b1.js', 'l4/b1/b1.vanilla.js']
+    });
+});
+
+it('should include only techs that exists in techMap', function() {
+    checkHarvest({
+        files: ['l1/b1/b1.js', 'l2/b1/b1.vanilla.js', 'l3/b1/b1.js', 'l4/b1/b1.vanilla.js'],
+        levels: ['l3', 'l2', 'l1', 'l4'],
+        decl: ['b1.js'],
+        techMap: {js: ['vanilla.js']},
+        result: ['l2/b1/b1.vanilla.js', 'l4/b1/b1.vanilla.js']
+    });
+});
+
+it('should correctly sort same entities with different techs', function() {
+    checkHarvest({
+        files: ['l1/b1/b1.js', 'l1/b2/b2.js', 'l1/b1/b1.styl', 'l1/b2/b2.styl'],
+        levels: ['l1'],
+        decl: ['b1.js', 'b2.css', 'b1.css', 'b2.js'],
+        techMap: {css: 'styl'},
+        result: ['l1/b1/b1.js', 'l1/b2/b2.styl', 'l1/b1/b1.styl', 'l1/b2/b2.js']
+    });
+});
 });
 
 // ['b1/b1.js', 'b2/b2.js', 'b3/b3.js']
 // {entity: {block: 'button'}, tech: 'css'}
 
 function checkHarvest(opts) {
-    opts.files = opts.files.map(makeFileEntity);
+    opts.introspection = opts.files.map(makeFileEntity);
     opts.result = opts.result.map(makeFileEntity);
     opts.decl = opts.decl.map(makeEntity);
 
-    lib.harvest(opts.files, opts.levels, opts.decl).map(normalize)
+    lib.harvest(opts).map(normalize)
         .should.eql(opts.result.map(normalize));
 }
 
