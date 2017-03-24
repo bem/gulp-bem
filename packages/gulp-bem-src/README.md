@@ -30,11 +30,10 @@ const src = require('gulp-bem-src');
 const postcss = require('gulp-postcss');
 const postcssUrl = require('postcss-url');
 
-src({
-    decl: [{ block: 'button' }],
-    levels: ['libs/islands/common.blocks/', 'blocks'],
-    tech: 'css',
-    extensions: ['.css'],
+src(
+    ['libs/islands/common.blocks/', 'blocks']
+    [{ block: 'button' }],
+    'css',
     config: {
         'libs/bem-core/common.blocks': { scheme: 'nested' },
         'libs/bem-core/desktop.blocks': { scheme: 'nested' },
@@ -45,7 +44,7 @@ src({
         'common.blocks': { scheme: 'nested' },
         'desktop.blocks': { scheme: 'nested' }
     }
-})
+)
 .pipe(postcss([
     postcssUrl({ url: 'inline' })
 ]))
