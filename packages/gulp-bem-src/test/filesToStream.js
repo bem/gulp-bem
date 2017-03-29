@@ -2,7 +2,7 @@ const path = require('path');
 
 const mockfs = require('mock-fs');
 const toArray = require('stream-to-array');
-const BemEntityName = require('bem-entity-name');
+const BemEntityName = require('@bem/entity-name');
 const BemNaming = require('bem-naming');
 
 const lib = require('../');

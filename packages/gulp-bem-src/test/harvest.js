@@ -1,4 +1,4 @@
-const BemEntityName = require('bem-entity-name');
+const BemEntityName = require('@bem/entity-name');
 const BemNaming = require('bem-naming');
 const path = require('path');
 const chai = require('chai');

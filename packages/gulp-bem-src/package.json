@@ -18,9 +18,10 @@
     "node": ">= 4.0"
   },
   "dependencies": {
-    "bem-config": "^3.0.0",
+    "@bem/cell": "^0.2.5",
     "@bem/deps": "0.2.0",
-    "bem-entity-name": "0.0.2",
+    "@bem/entity-name": "^1.4.0",
+    "bem-config": "^3.0.0",
     "bem-walk": "1.0.0-alpha1",
     "bubble-stream-error": "^1.0.0",
     "gulp-read": "0.0.1",
