@@ -54,7 +54,7 @@ module.exports = function(opts) {
                         levels,
                         bundle.decl,
                         tech,
-                        Object.assign({}, opts, subopts)
+                        Object.assign({}, opts, subopts, bundle.srcOpts)
                     ).on('error', cb);
                 },
                 target: function(target) {
