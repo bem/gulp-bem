@@ -33,16 +33,22 @@ const postcssUrl = require('postcss-url');
 src(
     ['libs/islands/common.blocks/', 'blocks']
     [{ block: 'button' }],
-    'css',
-    config: {
-        'libs/bem-core/common.blocks': { scheme: 'nested' },
-        'libs/bem-core/desktop.blocks': { scheme: 'nested' },
-        'libs/bem-components/common.blocks': { scheme: 'nested' },
-        'libs/bem-components/desktop.blocks': { scheme: 'nested' },
-        'libs/bem-components/design/common.blocks': { scheme: 'nested' },
-        'libs/bem-components/design/desktop.blocks': { scheme: 'nested' },
-        'common.blocks': { scheme: 'nested' },
-        'desktop.blocks': { scheme: 'nested' }
+    'styles', // wished dependencies technology
+    {
+        skipResolvingDependencies: false, // false by default, set to true if you dont want to resolve deps
+        techMap: { // use this to map internal techs to file techs
+            styles: ['sass', 'styl', 'css']
+        },
+        config: {
+            'libs/bem-core/common.blocks': { scheme: 'nested' },
+            'libs/bem-core/desktop.blocks': { scheme: 'nested' },
+            'libs/bem-components/common.blocks': { scheme: 'nested' },
+            'libs/bem-components/desktop.blocks': { scheme: 'nested' },
+            'libs/bem-components/design/common.blocks': { scheme: 'nested' },
+            'libs/bem-components/design/desktop.blocks': { scheme: 'nested' },
+            'common.blocks': { scheme: 'nested' },
+            'desktop.blocks': { scheme: 'nested' }
+        }
     }
 )
 .pipe(postcss([
