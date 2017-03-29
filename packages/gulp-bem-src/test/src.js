@@ -49,6 +49,22 @@ describe('src', () => {
         });
     });
 
+    it('should skip resolving deps step', function() {
+        return checkSrc({
+            files: {
+                'l1/b1/b1.deps.js': `[{shouldDeps: {block: 'b2'}}]`,
+                'l1/b1/b1.js': `1`,
+                'l1/b2/b2.js': `2`
+            },
+            decl: ['b1'],
+            levels: ['l1'],
+            tech: 'qq',
+            techMap: { qq: 'js' },
+            options: { skipResolvingDependencies: true },
+            result: ['l1/b1/b1.js']
+        });
+    });
+
     afterEach(mockfs.restore);
 });
 
@@ -73,7 +89,7 @@ function checkSrc(opts) {
             }, {}))
     };
 
-    return toArray(lib(opts.levels, opts.decl, opts.tech, {config, techMap: opts.techMap}))
+    return toArray(lib(opts.levels, opts.decl, opts.tech, Object.assign({config, techMap: opts.techMap}, opts.options)))
         .then(res => {
             res.map(f => ({path: f.path, contents: f.contents && String(f.contents)}))
                 .should.eql(opts.result.map(f => ({path: f.path, contents: files[f.path]})));
