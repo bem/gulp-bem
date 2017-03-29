@@ -78,7 +78,7 @@ function src(sources, decl, tech, options) {
         });
 
     // Получаем и исполняем содержимое файлов ?.deps.js (получаем набор объектов deps)
-    const depsData = introspectionP
+    const depsData = options.skipResolvingDependencies ? null : introspectionP
         .then(files => files
             // Получаем deps.js
             .filter(f => f.tech === 'deps.js')
@@ -89,10 +89,12 @@ function src(sources, decl, tech, options) {
         .then(deps.parse());
 
     // Получаем граф с помощью bem-deps
-    const graphP = depsData.then(deps.buildGraph);
+    const graphP = options.skipResolvingDependencies ? null : depsData.then(deps.buildGraph);
 
     // Раскрываем декларацию с помощью графа
-    const filedeclP = graphP
+    const filedeclP = options.skipResolvingDependencies
+        ? Promise.resolve(decl)
+        : graphP
         .then(graph => {
             const fulldecl = graph.dependenciesOf(decl, tech);
             fulldecl.forEach(fe => {
