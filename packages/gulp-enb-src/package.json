@@ -32,7 +32,7 @@
     "enb-bem-techs": "2.2.2",
     "es6-promisify": "5.0.0",
     "mkdirp": "0.5.1",
-    "vinyl": "2.0.1"
+    "vinyl": "2.0.2"
   },
   "devDependencies": {
     "ava": "^0.19.0",
