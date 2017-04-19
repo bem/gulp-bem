@@ -27,7 +27,7 @@
     "node": ">= 4.0"
   },
   "dependencies": {
-    "array-includes": "3.0.2",
+    "array-includes": "3.0.3",
     "enb": "1.5.1",
     "enb-bem-techs": "2.2.2",
     "es6-promisify": "5.0.0",
