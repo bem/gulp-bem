@@ -81,6 +81,17 @@ it('should correctly sort same entities with different techs', function() {
         result: ['l1/b1/b1.js', 'l1/b2/b2.styl', 'l1/b1/b1.styl', 'l1/b2/b2.js']
     });
 });
+
+it('should return common mapped file tech for both deps techs', function() {
+    checkHarvest({
+        files: ['l1/b1/b1.js', 'l1/b2/b2.js', 'l1/b1/b1.react.js', 'l1/b2/b2.react.js',
+            'l1/b1/b1.vanilla.js', 'l1/b2/b2.vanilla.js'],
+        levels: ['l1'],
+        decl: ['b1.js', 'b2.react'],
+        techMap: {js: ['vanilla.js', 'js'], react: ['vanilla.js', 'react.js']},
+        result: ['l1/b1/b1.vanilla.js', 'l1/b1/b1.js', 'l1/b2/b2.vanilla.js', 'l1/b2/b2.react.js']
+    });
+});
 });
 
 // ['b1/b1.js', 'b2/b2.js', 'b3/b3.js']

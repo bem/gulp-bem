@@ -215,15 +215,18 @@ function harvest(opts) {
     const techMap = opts.techMap || {};
     const fileTechToDep = Object.keys(techMap || {}).reduce((res, depTech) => {
         Array.isArray(techMap[depTech]) || (techMap[depTech] = [techMap[depTech]]);
-        techMap[depTech].forEach(fileTech => { res[fileTech] = depTech; });
+        techMap[depTech].forEach(fileTech => {
+            res[fileTech] || (res[fileTech] = []);
+            res[fileTech].push(depTech);
+        });
         return res;
     }, {});
 
-    const res = [];
+    const res = [], depTechForFile = {};
     for (const file of opts.introspection) {
         if (file.tech && !fileTechToDep[file.tech] && !techMap[file.tech]) {
             techMap[file.tech] = [file.tech];
-            fileTechToDep[file.tech] = file.tech;
+            fileTechToDep[file.tech] = [file.tech];
         }
 
         // Skip files with unwanted technologies
@@ -233,7 +236,9 @@ function harvest(opts) {
         }
 
         // … and files that does not exist in declaration
-        if (Object(declIndex[file.entity.id])[fileTech] === undefined) {
+        const techIndex = declIndex[file.entity.id];
+        const foundTech = techIndex && fileTech.find(ft => techIndex[ft] !== undefined);
+        if (!techIndex || !foundTech) {
             continue;
         }
 
@@ -242,6 +247,7 @@ function harvest(opts) {
             continue;
         }
 
+        depTechForFile[file.path] = foundTech;
         res.push(file);
     }
 
@@ -252,8 +258,8 @@ function harvest(opts) {
 
     // Sort in the right order: cell.entity position in declaration,
     return res.sort((f1, f2) => {
-        const f1DepTech = fileTechToDep[f1.tech];
-        const f2DepTech = fileTechToDep[f2.tech];
+        const f1DepTech = depTechForFile[f1.path];
+        const f2DepTech = depTechForFile[f2.path];
         return f1.entity.id === f2.entity.id && f1DepTech === f2DepTech
             ? (levelsPos[f1.level] - levelsPos[f2.level]) || (techPos[f1.tech] - techPos[f2.tech])
             : declIndex[f1.entity.id][f1DepTech] - declIndex[f2.entity.id][f2DepTech];
