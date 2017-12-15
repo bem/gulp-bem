@@ -2,18 +2,18 @@
 
 const assert = require('assert');
 const path = require('path');
+const inspect = require('util').inspect;
 
-const BemCell = require('@bem/cell');
-const BemEntityName = require('@bem/entity-name');
-const bemConfig = require('bem-config');
-const walk = require('bem-walk');
+const BemCell = require('@bem/sdk.cell');
+const bemConfig = require('@bem/sdk.config');
+const walk = require('@bem/sdk.walk');
 const File = require('vinyl');
 const toArray = require('stream-to-array');
 const thru = require('through2');
 const read = require('gulp-read');
 const bubbleStreamError = require('bubble-stream-error');
 
-const deps = require('@bem/deps');
+const deps = require('@bem/sdk.deps');
 
 module.exports = src;
 
@@ -70,12 +70,6 @@ function src(sources, decl, tech, options) {
                         'See also https://github.com/bem-sdk/bem-walk/issues/76'), 1000);
                 toArray(intro).then(resolve).catch(reject);
             });
-        })
-        .then(files => {
-            files.forEach(fe => {
-                fe.entity = BemEntityName.create(fe.entity);
-            });
-            return files;
         });
 
     // Получаем и исполняем содержимое файлов ?.deps.js (получаем набор объектов deps)
@@ -116,7 +110,7 @@ function src(sources, decl, tech, options) {
             stream.push(new File({
                 name: '',
                 path: 'name.deps.js',
-                contents: new Buffer(require('util').inspect(fulldecl.map(f),
+                contents: new Buffer(inspect(fulldecl.map(f),
                     {depth: null, breakLength: 100, maxArrayLength: null}))
             }));
             stream.push(null);

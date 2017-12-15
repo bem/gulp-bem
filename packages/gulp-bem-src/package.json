@@ -18,11 +18,11 @@
     "node": ">= 4.0"
   },
   "dependencies": {
-    "@bem/cell": "^0.2.5",
-    "@bem/deps": "0.2.0",
-    "@bem/entity-name": "^1.4.0",
-    "bem-config": "^3.0.0",
-    "bem-walk": "1.0.0-alpha1",
+    "@bem/sdk.cell": "^0.2.4",
+    "@bem/sdk.config": "0.0.5",
+    "@bem/sdk.deps": "^0.2.6",
+    "@bem/sdk.entity-name": "^0.2.4",
+    "@bem/sdk.walk": "^0.2.5",
     "bubble-stream-error": "^1.0.0",
     "gulp-read": "0.0.1",
     "mz": "^2.4.0",
@@ -31,7 +31,8 @@
     "vinyl": "1.1.0"
   },
   "devDependencies": {
-    "bem-naming": "^1.0.1",
+    "@bem/sdk.naming.entity.parse": "^0.2.4",
+    "@bem/sdk.naming.presets": "^0.0.7",
     "chai": "^3.5.0",
     "coveralls": "^2.11.12",
     "eslint": "3.2.2",

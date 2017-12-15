@@ -2,8 +2,7 @@ const path = require('path');
 
 const mockfs = require('mock-fs');
 const toArray = require('stream-to-array');
-const BemEntityName = require('@bem/entity-name');
-const BemNaming = require('bem-naming');
+const parseEntity = require('@bem/sdk.naming.entity.parse')(require('@bem/sdk.naming.presets/origin'));
 
 const lib = require('../');
 
@@ -57,6 +56,6 @@ function makeFileEntity(filepath) {
     const level = filepath.split('/')[0];
     const tech = path.basename(filepath).split('.').slice(1).join('.');
     const entityName = path.basename(filepath).split('.')[0];
-    const entity = new BemEntityName(BemNaming.parse(entityName));
+    const entity = parseEntity(entityName);
     return {entity, level, tech, path: filepath};
 }

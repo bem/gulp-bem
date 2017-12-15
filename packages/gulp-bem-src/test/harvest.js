@@ -1,8 +1,8 @@
-const BemEntityName = require('@bem/entity-name');
-const BemNaming = require('bem-naming');
 const path = require('path');
+
+const parseEntity = require('@bem/sdk.naming.entity.parse')(require('@bem/sdk.naming.presets/origin'));
 const chai = require('chai');
-const lib = require('../');
+const lib = require('..');
 
 chai.should();
 
@@ -108,16 +108,17 @@ function checkHarvest(opts) {
 
 function makeFileEntity(filepath) {
     const level = filepath.split('/')[0];
-    const tech = path.basename(filepath).split('.').slice(1).join('.');
-    const entityName = path.basename(filepath).split('.')[0];
-    const entity = new BemEntityName(BemNaming.parse(entityName));
+    const parts = path.basename(filepath).split('.');
+    const tech = parts.slice(1).join('.');
+    const entityName = parts[0];
+    const entity = parseEntity(entityName);
     return {entity, level, tech, path: filepath};
 }
 function makeEntity(str) {
     str = str.split('.');
     const entityName = str[0];
     const tech = str[1];
-    const entity = new BemEntityName(BemNaming.parse(entityName));
+    const entity = parseEntity(entityName);
     return {entity, tech};
 }
 function normalize(fileEntity) {
