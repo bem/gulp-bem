@@ -43,7 +43,7 @@
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "pretest": "npm run lint",
-    "test": "mocha",
+    "test": "nyc mocha",
     "lint": "eslint ."
   }
 }
