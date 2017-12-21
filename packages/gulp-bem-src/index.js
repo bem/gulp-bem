@@ -3,13 +3,13 @@
 const assert = require('assert');
 const path = require('path');
 const inspect = require('util').inspect;
+const Readable = require('stream').Readable;
 
 const BemCell = require('@bem/sdk.cell');
 const bemConfig = require('@bem/sdk.config');
 const walk = require('@bem/sdk.walk');
 const File = require('vinyl');
 const toArray = require('stream-to-array');
-const thru = require('through2');
 const read = require('gulp-read');
 const bubbleStreamError = require('bubble-stream-error');
 
@@ -96,20 +96,20 @@ function src(sources, decl, tech, options) {
         : graphP.then(graph => graph.dependenciesOf(decl, tech)))
             .then(entities => entities.map(BemCell.create));
 
-    if (options.deps === true) {
-        const stream = thru.obj();
+    if (options.deps) {
+        const stream = new Readable({objectMode: true, read() {}});
         filedeclP.then(fulldecl => {
             const f = v => {
                 const res = {};
                 v.tech && (res.tech = v.tech);
                 v.entity.block && (res.block = v.entity.block);
                 v.entity.elem && (res.elem = v.entity.elem);
-                v.entity.mod.name && (res.mod = v.entity.mod.name, res.val = v.entity.mod.val); // eslint-disable-line
+                v.entity.mod && (res.mod = v.entity.mod.name, res.val = v.entity.mod.val); // eslint-disable-line
                 return res;
             };
             stream.push(new File({
                 name: '',
-                path: 'name.deps.js',
+                path: options.deps !== true ? options.deps : 'anonymous.deps.js',
                 contents: new Buffer(inspect(fulldecl.map(f),
                     {depth: null, breakLength: 100, maxArrayLength: null}))
             }));
@@ -139,45 +139,56 @@ function src(sources, decl, tech, options) {
  * @returns {Stream<Vinyl>}
  */
 function filesToStream(filesPromise, options) {
-    const stream = thru.obj();
+    let files = null, i;
+    const stream = new Readable({
+        objectMode: true,
+        read() {
+            if (files) {
+                return tryread(this);
+            }
+
+            Promise.resolve(filesPromise).then(files_ => {
+                i = 0;
+                files = files_;
+                tryread(this);
+            });
+
+            function tryread(self) {
+                try {
+                    _read.call(self);
+                } catch (e) {
+                    self.emit('error', e);
+                    self.push(null);
+                }
+            }
+        }
+    });
+
+    function _read() {
+        if (!files.length) {
+            return this.push(null);
+        }
+
+        for (; i < files.length; ) { // eslint-disable-line
+            const file = files[i++];
+            const vf = new File({
+                name: '',
+                base: file.level,
+                path: file.path,
+                contents: null
+            });
+
+            vf.name = path.basename(file.path).split('.')[0];
+            vf.__proto__.__proto__ = file; // eslint-disable-line
+
+            if (this.push(vf) === false) { return; }
+        }
+        this.push(null);
+    }
 
     options = Object.assign({
         read: true
     }, options);
-
-    Promise.resolve(filesPromise)
-        .then(files => new Promise((resolve) => {
-            let i = 0;
-            const l = files.length;
-
-            (function next() {
-                if (i >= l) {
-                    stream.push(null);
-                    resolve();
-                    return;
-                }
-
-                const file = files[i++];
-                const vf = new File({
-                    name: '',
-                    base: file.level,
-                    path: file.path,
-                    contents: null
-                });
-
-                vf.name = path.basename(file.path).split('.')[0];
-                vf.tech = file.tech;
-                vf.level = file.level;
-                vf.entity = file.entity;
-
-                stream.push(vf);
-                process.nextTick(next);
-            }());
-        }))
-        .catch(err => {
-            stream.emit('error', err);
-            stream.push(null);
-        });
 
     let result = stream;
 
