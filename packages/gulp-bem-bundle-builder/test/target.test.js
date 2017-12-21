@@ -5,7 +5,7 @@ const streamFromArray = require('stream-from-array');
 const toArray = require('stream-to-array');
 const mockfs = require('mock-fs');
 
-const BemBundle = require('bem-bundle');
+const BemBundle = require('@bem/sdk.bundle');
 const File = require('vinyl');
 
 const Builder = require('..');

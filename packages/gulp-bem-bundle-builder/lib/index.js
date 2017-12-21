@@ -3,13 +3,14 @@
 const assert = require('assert');
 const path = require('path');
 const util = require('util');
+const Readable = require('stream').Readable;
 
 const fs = require('mz/fs');
 const _eval = require('node-eval');
 const merge = require('merge2');
 const gulpBemSrc = require('gulp-bem-src');
 const thru = require('through2');
-const BemBundle = require('@bem/bundle');
+const BemBundle = require('@bem/sdk.bundle');
 const File = require('vinyl');
 
 /**
@@ -73,7 +74,7 @@ module.exports = function(opts) {
                                     })
                                 ]));
 
-                    const out = thru.obj();
+                    const out = new Readable({objectMode: true, read() {}});
 
                     buffer
                         .then(chunks => {
@@ -93,7 +94,7 @@ module.exports = function(opts) {
                 const stream = tryCatch(() => streamGenerator(ctx), cb);
 
                 if (!stream) {
-                    return thru.obj();
+                    return new Readable({objectMode: null, read() {}});
                 }
 
                 targetDataBuffer[target] = new Promise(resolve => {
