@@ -10,9 +10,9 @@
     "bem",
     "src"
   ],
-  "main": "index.js",
+  "main": "gulp-bem-src.js",
   "files": [
-    "index.js"
+    "gulp-bem-src.js"
   ],
   "engines": {
     "node": ">= 4.0"
