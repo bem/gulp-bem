@@ -30,11 +30,11 @@
   "dependencies": {
     "@bem/sdk.bundle": "^0.2.6",
     "gulp-bem-src": "^0.1.1",
-    "merge2": "^1.0.2",
+    "merge2": "^1.2.0",
     "mz": "^2.7.0",
-    "node-eval": "^1.0.3",
-    "through2": "^2.0.1",
-    "vinyl": "^1.1.1"
+    "node-eval": "^1.1.1",
+    "through2": "^2.0.3",
+    "vinyl": "^2.1.0"
   },
   "devDependencies": {
     "ava": "^0.16.0",
@@ -43,7 +43,7 @@
     "eslint-config-pedant": "^0.8.0",
     "gulp-concat": "^2.6.0",
     "mock-fs": "^4.4.2",
-    "nyc": "^8.1.0",
+    "nyc": "^11.4.1",
     "stream-from-array": "^1.0.0",
     "stream-to-array": "^2.3.0"
   }
