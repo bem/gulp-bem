@@ -179,7 +179,11 @@ function filesToStream(filesPromise, options) {
             });
 
             vf.name = path.basename(file.path).split('.')[0];
-            vf.__proto__.__proto__ = file; // eslint-disable-line
+            vf.level = file.level;
+            vf.cell = file.cell;
+            vf.entity = file.entity;
+            vf.layer = file.layer;
+            vf.tech = file.tech;
 
             if (this.push(vf) === false) { return; }
         }
