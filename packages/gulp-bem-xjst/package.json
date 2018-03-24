@@ -1,0 +1,44 @@
+{
+  "name": "gulp-bem-xjst",
+  "version": "3.0.0",
+  "description": "bem-xjst templates compiler",
+  "keywords": [
+    "gulpplugin",
+    "bemhtml",
+    "bemtree",
+    "bem-xjst",
+    "template",
+    "templates",
+    "compile"
+  ],
+  "homepage": "https://github.com/gulp-bem/gulp-bem-xjst",
+  "bugs": {
+    "url": "https://github.com/gulp-bem/gulp-bem-xjst/issues"
+  },
+  "license": "MIT",
+  "main": "lib/gulp-bem-xjst.js",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gulp-bem/gulp-bem-xjst.git"
+  },
+  "contributors": [
+    "Alexey Litvinov <iamhoneyboy@gmail.com>",
+    "Alexey Yaroshevich <zxqfox@gmail.com>"
+  ],
+  "dependencies": {
+    "bem-xjst": "^8.4.0",
+    "is-stream": "^1.1.0",
+    "node-eval": "^1.1.0",
+    "plugin-error": "^0.1.2",
+    "stream-to-array": "^2.3.0",
+    "through2": "^2.0.3",
+    "vinyl": "^2.0.1"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "into-stream": "^3.1.0"
+  }
+}

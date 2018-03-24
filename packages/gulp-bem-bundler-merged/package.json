@@ -1,0 +1,25 @@
+{
+  "name": "gulp-bem-bundler-merged",
+  "version": "0.0.1",
+  "description": "",
+  "license": "MIT",
+  "repository": "gulp-bem/gulp-bem-bundler-merged",
+  "keywords": [
+    "gulp",
+    "bem",
+    "bundler",
+    "merged"
+  ],
+  "main": "lib/gulp-bem-bundler-merged.js",
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": ">= 4.0"
+  },
+  "dependencies": {
+    "@bem/bundle": "^0.2.2",
+    "bem-decl": "^0.3.0",
+    "through2": "^2.0.3"
+  }
+}

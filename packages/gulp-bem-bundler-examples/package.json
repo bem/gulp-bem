@@ -1,0 +1,30 @@
+{
+  "name": "gulp-bem-bundler-examples",
+  "version": "0.0.1",
+  "description": "Gulp plugin for transforing examples to bundles",
+  "keywords": ["gulp", "bem", "examples", "bundler"],
+  "author": "Ilia Isupov <ilia.isupov@gmail.com>",
+  "maintainers": [
+    "Ilia Isupov <ilia.isupov@gmail.com>",
+    "Andrey Kuznetsov <andrey.kuznetsov48@yandex.ru> (http://github.com/tormozz48)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gulp-bem/gulp-bem-bundler-examples.git"
+  },
+  "main": "lib/gulp-bem-bundler-examples.js",
+  "files": [
+    "lib"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@bem/gulp": "0.0.5",
+    "debug": "^2.2.0",
+    "lodash": "^4.7.0",
+    "q": "^1.4.1",
+    "streaming-json-stringify": "^3.1.0",
+    "through2": "^2.0.1",
+    "vinyl": "^1.1.1",
+    "vinyl-fs": "^2.4.3"
+  }
+}

@@ -1,18 +1,14 @@
 {
   "name": "@bem/gulp",
-  "version": "0.0.7",
+  "version": "0.0.0",
   "description": "Gulp bemifier adaptorrre",
-  "main": "lib/index.js",
-  "scripts": {
-    "test": "mocha spec",
-    "postpublish": "greenkeeper-postpublish"
-  },
+  "homepage": "https://github.com/gulp-bem/gulp-bem#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gulp-bem/gulp-bem.git"
   },
   "keywords": [
-    "gulpplugin",
+    "gulp",
     "bem"
   ],
   "contributors": [
@@ -25,27 +21,22 @@
     "url": "https://github.com/gulp-bem/gulp-bem/issues"
   },
   "engines": {
-    "node": ">= 4.0"
-  },
-  "files": [
-    "lib/"
-  ],
-  "homepage": "https://github.com/gulp-bem/gulp-bem#readme",
-  "dependencies": {
-    "@bem/deps": "^0.0.10",
-    "bem-decl": "git://github.com/bem/bem-decl.git#910827ef2a243815d1ed47a6f0b148fc20afc2d3",
-    "bem-walk": "^1.0.0-alpha1",
-    "bemjson-to-decl": "0.0.1",
-    "gulp-eval": "1.0.0",
-    "sort-stream2": "^1.0.0",
-    "stream-to-array": "^2.2.0",
-    "through2": "^2.0.0",
-    "vinyl": "^1.1.0",
-    "vinyl-fs": "^2.3.1"
+    "node": "8"
   },
   "devDependencies": {
-    "greenkeeper-postpublish": "^1.0.0",
-    "gulp": "git://github.com/gulpjs/gulp.git#4.0",
-    "mocha": "^2.3.4"
+    "lerna": "^2.9.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.5",
+    "sinon-chai": "^3.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-pedant": "^1.0.0",
+    "mock-fs": "^4.4.2",
+    "nyc": "^11.6.0",
+    "sinon": "^5.0.0",
+    "chai-as-promised": "^7.1.1"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "nyc mocha 'packages/*/test/**/*.test.js'"
   }
 }

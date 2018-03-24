@@ -1,0 +1,28 @@
+{
+  "name": "gulp-bem-bundler-fs",
+  "version": "0.0.10",
+  "description": "",
+  "license": "MIT",
+  "repository": "gulp-bem/gulp-bem-bundler-fs",
+  "author": "Andrew Abramov <mail@blond.im> (github.com/blond)",
+  "keywords": [
+    "gulp",
+    "bem",
+    "bundler",
+    "fs"
+  ],
+  "main": "lib/gulp-bem-bundler-fs.js",
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": ">= 4.0"
+  },
+  "dependencies": {
+    "@bem/bundle": "^0.2.0",
+    "bem-decl": "^0.3.0",
+    "globby": "^6.0.0",
+    "mz": "^2.4.0",
+    "node-eval": "^1.0.3"
+  }
+}

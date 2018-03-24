@@ -1,0 +1,13 @@
+{
+  "lerna": "2.9.0",
+  "packages": [
+    "packages/*"
+  ],
+  "version": "independent",
+  "hoist": true,
+  "independent": true,
+  "conventionalCommits": true,
+  "exact": true,
+  "npmClient": "npm",
+  "npmClientArgs": ["--no-package-lock"]
+}
