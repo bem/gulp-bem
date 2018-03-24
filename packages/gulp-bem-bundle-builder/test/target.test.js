@@ -1,4 +1,5 @@
-const test = require('ava');
+const { describe, it } = require('mocha');
+const assert = require('chai').assert;
 
 const concat = require('gulp-concat');
 const streamFromArray = require('stream-from-array');
@@ -11,14 +12,18 @@ const File = require('vinyl');
 const Builder = require('..');
 const builder = Builder({levels: 'blocks'});
 
-test.afterEach.always(() => mockfs.restore());
-
-test.serial('should use another target as source', t => {
-    mockfs({
-        'blocks/b/b.js': `/* js */`,
-        'bundleX.bemdecl.js': `[{block: 'b'}]`
+describe('gulp-bem-bundle-builder (target)', () => {
+    afterEach(() => {
+        mockfs.restore()
     });
-    return toArray(streamFromArray.obj([
+
+    it('should use another target as source', async () => {
+        mockfs({
+            'blocks/b/b.js': `/* js */`,
+            'bundleX.bemdecl.js': `[{block: 'b'}]`
+        });
+
+        const stream = streamFromArray.obj([
             new BemBundle({
                 path: 'bundleX.bemdecl.js',
                 decl: [{block: 'b'}]
@@ -28,15 +33,15 @@ test.serial('should use another target as source', t => {
         .pipe(builder({
             xjs: bundle => bundle.src('js').pipe(concat(bundle.name + '.js')),
             magic: bundle => bundle.target('xjs').pipe(concat(bundle.name + '.magic'))
-        })))
-        .then(array => {
-            t.deepEqual(array.map(f => `${f.path}: ${f.contents}`),
-                ['bundleX.js: /* js */', 'bundleX.magic: /* js */']);
-        });
-});
+        }));
 
-test('should resolve targets recursively', t => {
-    return toArray(streamFromArray.obj([
+        const bundlesInfo = (await toArray(stream)).map(f => `${f.path}: ${f.contents}`);
+
+        assert.deepEqual(bundlesInfo, ['bundleX.js: /* js */', 'bundleX.magic: /* js */']);
+    });
+
+    it('should resolve targets recursively', async () => {
+        const stream = streamFromArray.obj([
             new BemBundle({
                 path: 'bundle.bemdecl.js',
                 decl: []
@@ -48,17 +53,19 @@ test('should resolve targets recursively', t => {
             y: bundle => bundle.target('x'),
             z: bundle => bundle.target('y'),
             res: bundle => bundle.target('z').pipe(concat(`${bundle.name}.res`))
-        })))
-        .then(array =>
-            t.deepEqual(array.map(f => `${f.path}: ${f.contents}`).filter(v => v !== 'x: x'),
-                ['bundle.res: x']));
-});
+        }));
 
-test.serial('should use target instead of loading files if there is a target', t => {
-    mockfs({
-        'bundle.x': `x`
+        const bundlesInfo = (await toArray(stream)).map(f => `${f.path}: ${f.contents}`).filter(v => v !== 'x: x');
+
+        assert.deepEqual(bundlesInfo, ['bundle.res: x']);
     });
-    return toArray(streamFromArray.obj([
+
+    it('should use target instead of loading files if there is a target', async () => {
+        mockfs({
+            'bundle.x': `x`
+        });
+
+        const stream = streamFromArray.obj([
             new BemBundle({
                 path: 'bundle.bemdecl.js',
                 decl: []
@@ -68,17 +75,19 @@ test.serial('should use target instead of loading files if there is a target', t
         .pipe(builder({
             x: () => streamFromArray.obj([new File({path: 'x', contents: new Buffer('dynamic x')})]),
             res: bundle => bundle.target('x').pipe(concat(`${bundle.name}.res`))
-        })))
-        .then(array =>
-            t.deepEqual(array.map(f => `${f.path}: ${f.contents}`),
-                ['x: dynamic x', 'bundle.res: dynamic x']));
-});
+        }));
 
-test.serial('should try to load files from fs if there is no target', t => {
-    mockfs({
-        'bundle.x': `x`
+        const bundlesInfo = (await toArray(stream)).map(f => `${f.path}: ${f.contents}`);
+
+        assert.deepEqual(bundlesInfo, ['x: dynamic x', 'bundle.res: dynamic x']);
     });
-    return toArray(streamFromArray.obj([
+
+    it('should try to load files from fs if there is no target', async () => {
+        mockfs({
+            'bundle.x': `x`
+        });
+
+        const stream = streamFromArray.obj([
             new BemBundle({
                 path: 'bundle.bemdecl.js',
                 decl: []
@@ -87,21 +96,25 @@ test.serial('should try to load files from fs if there is no target', t => {
         // Stream<BemBundle>
         .pipe(builder({
             res: bundle => bundle.target('x').pipe(concat(`${bundle.name}.res`))
-        })))
-        .then(array =>
-            t.deepEqual(array.map(f => `${f.path}: ${f.contents}`),
-                ['bundle.res: x']));
-});
+        }));
 
-test('should catch and emit an error for target', t => {
-    t.throws(toArray(streamFromArray.obj([
-        new BemBundle({
-            path: 'bundle.bemdecl.js',
-            decl: [{block: 'b'}]
-        })
-    ])
-    // Stream<BemBundle>
-    .pipe(builder({
-        res: bundle => bundle.target('unknown.target')
-    }))), /ENOENT:.*bundle.unknown.target/);
+        const bundlesInfo = (await toArray(stream)).map(f => `${f.path}: ${f.contents}`);
+
+        assert.deepEqual(bundlesInfo, ['bundle.res: x']);
+    });
+
+    it('should catch and emit an error for target', () => {
+        const stream = streamFromArray.obj([
+            new BemBundle({
+                path: 'bundle.bemdecl.js',
+                decl: [{block: 'b'}]
+            })
+        ])
+        // Stream<BemBundle>
+        .pipe(builder({
+            res: bundle => bundle.target('unknown.target')
+        }));
+
+        assert.isRejected(toArray(stream), /ENOENT:.*bundle.unknown.target/);
+    });
 });

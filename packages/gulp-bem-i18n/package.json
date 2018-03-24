@@ -15,18 +15,12 @@
     "type": "git",
     "url": "https://github.com/gulp-bem/gulp-bem-i18n.git"
   },
-  "scripts": {
-    "lint": "eslint .",
-    "test": "mocha"
-  },
   "license": "MIT",
+  "main": "lib/gulp-bem-i18n.js",
+  "files": [
+    "lib"
+  ],
   "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint": "^3.7.0",
-    "eslint-config-pedant": "^0.8.0",
-    "mocha": "^3.1.0",
-    "mock-fs": "^3.11.0",
-    "sinon": "^1.17.6",
     "stream-from-array": "^1.0.0"
   },
   "dependencies": {

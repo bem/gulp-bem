@@ -2,16 +2,18 @@
 
 const path = require('path');
 
-const test = require('ava');
 const bemjsonToDecl = require('bemjson-to-decl').convert;
 const bemDecl = require('bem-decl');
 const bemDeclConvert = require('bem-decl/lib/convert');
 const toArray = require('stream-to-array');
 
-const src = require('../index');
+const assert = require('chai').assert;
+const { describe, it } = require('mocha');
+
+const src = require('..');
 
 const fixturesDir = path.join(__dirname, 'fixtures');
-const projectStubDir = path.join(fixturesDir, 'node_modules', 'bem-project-stub');
+const projectStubDir = path.dirname(require.resolve('bem-project-stub/package.json'));
 const bundleName = 'index';
 const bundleDir = path.join(projectStubDir, 'desktop.bundles', 'index');
 const bemjsonPath = path.join(bundleDir, `${bundleName}.bemjson.js`);
@@ -34,17 +36,19 @@ const jsPaths = require(`${fixturesDir}/project-stub-files`).js.map(filename => 
     return path.normalize(fullname);
 });
 
-test('should scan `project-stub`', async t => {
-    const stream = src({
-        levels, decl,
-        tech: 'js',
-        extensions: ['.vanilla.js', '.browser.js', '.js'],
-        root: projectStubDir,
-        cache: false
+describe('gulp-enb-src', () => {
+    it('should scan `project-stub`', async () => {
+        const stream = src({
+            levels, decl,
+            tech: 'js',
+            extensions: ['.vanilla.js', '.browser.js', '.js'],
+            root: projectStubDir,
+            cache: false
+        });
+
+        const files = await toArray(stream);
+        const paths = files.map(file => file.path);
+
+        assert.deepEqual(paths, jsPaths);
     });
-
-    const files = await toArray(stream);
-    const paths = files.map(file => file.path);
-
-    t.deepEqual(paths, jsPaths);
 });

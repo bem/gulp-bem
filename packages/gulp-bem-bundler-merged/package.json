@@ -10,9 +10,9 @@
     "bundler",
     "merged"
   ],
-  "main": "index.js",
+  "main": "lib/gulp-bem-bundler-merged.js",
   "files": [
-    "index.js"
+    "lib"
   ],
   "engines": {
     "node": ">= 4.0"
@@ -21,13 +21,5 @@
     "@bem/bundle": "^0.2.2",
     "bem-decl": "^0.3.0",
     "through2": "^2.0.3"
-  },
-  "devDependencies": {
-    "eslint": "2.6.0",
-    "eslint-config-pedant": "0.1.1"
-  },
-  "scripts": {
-    "test": "npm run lint",
-    "lint": "eslint ."
   }
 }

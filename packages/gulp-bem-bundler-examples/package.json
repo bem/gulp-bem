@@ -12,7 +12,10 @@
     "type": "git",
     "url": "https://github.com/gulp-bem/gulp-bem-bundler-examples.git"
   },
-  "main": "lib/index.js",
+  "main": "lib/gulp-bem-bundler-examples.js",
+  "files": [
+    "lib"
+  ],
   "license": "MIT",
   "dependencies": {
     "@bem/gulp": "0.0.5",
@@ -23,18 +26,5 @@
     "through2": "^2.0.1",
     "vinyl": "^1.1.1",
     "vinyl-fs": "^2.4.3"
-  },
-  "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint": "^2.7.0",
-    "eslint-config-pedant": "^0.1.1",
-    "istanbul": "^0.4.2",
-    "mocha": "^2.4.5",
-    "sinon-chai": "^2.8.0"
-  },
-  "scripts": {
-    "test": "mocha",
-    "coverage": "istanbul cover _mocha",
-    "lint": "eslint ."
   }
 }

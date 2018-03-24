@@ -2,13 +2,7 @@
   "name": "gulp-bem-bundle-builder",
   "version": "0.1.5",
   "description": "gulp-bem bundle builder",
-  "main": "lib/index.js",
-  "scripts": {
-    "pretest": "npm run lint",
-    "test": "nyc ava",
-    "lint": "eslint .",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
-  },
+  "main": "lib/gulp-bem-bundle-builder.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gulp-bem/gulp-bem-bundle-builder.git"
@@ -37,14 +31,6 @@
     "vinyl": "^2.1.0"
   },
   "devDependencies": {
-    "ava": "^0.16.0",
-    "coveralls": "^2.11.12",
-    "eslint": "^3.4.0",
-    "eslint-config-pedant": "^0.8.0",
-    "gulp-concat": "^2.6.0",
-    "mock-fs": "^4.4.2",
-    "nyc": "^11.4.1",
-    "stream-from-array": "^1.0.0",
-    "stream-to-array": "^2.3.0"
+    "gulp-concat": "^2.6.0"
   }
 }

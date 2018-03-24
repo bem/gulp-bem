@@ -11,9 +11,9 @@
     "bundler",
     "fs"
   ],
-  "main": "index.js",
+  "main": "lib/gulp-bem-bundler-fs.js",
   "files": [
-    "index.js"
+    "lib"
   ],
   "engines": {
     "node": ">= 4.0"
@@ -24,13 +24,5 @@
     "globby": "^6.0.0",
     "mz": "^2.4.0",
     "node-eval": "^1.0.3"
-  },
-  "devDependencies": {
-    "eslint": "2.6.0",
-    "eslint-config-pedant": "0.1.1"
-  },
-  "scripts": {
-    "test": "npm run lint",
-    "lint": "eslint ."
   }
 }
