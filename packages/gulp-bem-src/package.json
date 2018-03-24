@@ -18,15 +18,15 @@
     "node": ">= 4.0"
   },
   "dependencies": {
-    "@bem/sdk.cell": "^0.2.4",
+    "@bem/sdk.cell": "0.2.4",
     "@bem/sdk.config": "0.0.6",
-    "@bem/sdk.deps": "^0.2.6",
-    "@bem/sdk.entity-name": "^0.2.4",
-    "@bem/sdk.walk": "^0.2.5",
-    "bubble-stream-error": "^1.0.0",
+    "@bem/sdk.deps": "0.2.6",
+    "@bem/sdk.entity-name": "0.2.4",
+    "@bem/sdk.walk": "0.2.5",
+    "bubble-stream-error": "1.0.0",
     "gulp-read": "0.0.1",
-    "stream-to-array": "^2.3.0",
-    "vinyl": "^2.1.0"
+    "stream-to-array": "2.3.0",
+    "vinyl": "2.1.0"
   },
   "devDependencies": {
     "@bem/sdk.naming.entity.parse": "^0.2.4",
