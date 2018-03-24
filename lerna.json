@@ -3,5 +3,11 @@
   "packages": [
     "packages/*"
   ],
-  "version": "0.0.0"
+  "version": "independent",
+  "hoist": true,
+  "independent": true,
+  "conventionalCommits": true,
+  "exact": true,
+  "npmClient": "npm",
+  "npmClientArgs": ["--no-package-lock"]
 }
