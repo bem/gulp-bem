@@ -25,6 +25,7 @@
     "@bem/sdk.walk": "^0.2.5",
     "bubble-stream-error": "^1.0.0",
     "gulp-read": "0.0.1",
+    "stream-to-array": "^2.3.0",
     "vinyl": "^2.1.0"
   },
   "devDependencies": {
