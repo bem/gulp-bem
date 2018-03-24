@@ -1,18 +1,18 @@
 const path = require('path');
 const inspect = require('util').inspect;
 
+const { assert } = require('chai');
 const mockfs = require('mock-fs');
 const toArray = require('stream-to-array');
 const parseEntity = require('@bem/sdk.naming.entity.parse')(require('@bem/sdk.naming.presets/origin'));
 
 const lib = require('../');
 
-const chai = require('chai');
-chai.should();
-
 describe('src', () => {
-    it('should return no files if no files', function() {
-        return checkSrc({
+    afterEach(mockfs.restore);
+
+    it('should return no files if no files', async () => {
+        await checkSrc({
             files: {l1: {}, l2: {}},
             decl: ['b1', 'b2'],
             levels: ['l1', 'l2'],
@@ -21,8 +21,8 @@ describe('src', () => {
         });
     });
 
-    it('should return files for entities in decl without deps', function() {
-        return checkSrc({
+    it('should return files for entities in decl without deps', async () => {
+        await checkSrc({
             files: ['l1/b2/b2.js', 'l1/b1/b1.es', 'l2/b1/b1.js', 'l2/b1/b1.css', 'l1/b1/b1.js', 'l2/b1/b1.es'],
             decl: ['b1', 'b2'],
             levels: ['l1', 'l2'],
@@ -33,8 +33,8 @@ describe('src', () => {
         });
     });
 
-    it('should return resolved deps only if deps option passed', function() {
-        return checkSrc({
+    it('should return resolved deps only if deps option passed', async () => {
+        await checkSrc({
             files: {
                 'l1/b1/b1.deps.js': `[{ shouldDeps: [{elem: 'e'}] }]`,
                 'l2/b1/b1.deps.js': `[{ shouldDeps: [{mod: 'm'}] }]`
@@ -54,8 +54,8 @@ describe('src', () => {
         });
     });
 
-    it('should return resolved named deps file if deps option passed with string', function() {
-        return checkSrc({
+    it('should return resolved named deps file if deps option passed with string', async () => {
+        await checkSrc({
             files: {'l1': {}}, // Walker doesn't work if no directory exists
             decl: ['b1'],
             levels: ['l1'],
@@ -68,8 +68,8 @@ describe('src', () => {
         });
     });
 
-    it('should return something', function() {
-        return checkSrc({
+    it('should return something', async () => {
+        await checkSrc({
             files: {
                 'l1/b1/b1.deps.js': `[{shouldDeps: {block: 'b2'}}]`,
                 'l1/b1/b1.js': `1`,
@@ -83,8 +83,8 @@ describe('src', () => {
         });
     });
 
-    it('should skip resolving deps step', function() {
-        return checkSrc({
+    it('should skip resolving deps step', async () => {
+        await checkSrc({
             files: {
                 'l1/b1/b1.deps.js': `[{shouldDeps: {block: 'b2'}}]`,
                 'l1/b1/b1.js': `1`,
@@ -98,11 +98,9 @@ describe('src', () => {
             result: ['l1/b1/b1.js']
         });
     });
-
-    afterEach(mockfs.restore);
 });
 
-function checkSrc(opts) {
+async function checkSrc(opts) {
     const files = Array.isArray(opts.files)
         ? opts.files.reduce((res, f, idx) => {
             res[f] = String(idx);
@@ -123,11 +121,11 @@ function checkSrc(opts) {
             }, {}))
     };
 
-    return toArray(lib(opts.levels, opts.decl, opts.tech, Object.assign({config, techMap: opts.techMap}, opts.options)))
-        .then(res => {
-            res.map(f => ({path: f.path, contents: f.contents && String(f.contents)}))
-                .should.eql(opts.result.map(f => ({path: f.path, contents: f.contents || files[f.path]})));
-        });
+    const res = await toArray(lib(opts.levels, opts.decl, opts.tech, Object.assign({config, techMap: opts.techMap}, opts.options)))
+    const actual = res.map(f => ({path: f.path, contents: f.contents && String(f.contents)}));
+    const expected = opts.result.map(f => ({path: f.path, contents: f.contents || files[f.path]}));
+
+    assert.deepEqual(actual, expected);
 }
 
 function makeFileEntity(filepath) {
