@@ -37,6 +37,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "nyc mocha 'packages/*/test/**/*.test.js'"
+    "test": "nyc mocha 'packages/*/test/**/*.test.js'",
+    "publish:canary": "lerna publish --skip-git --canary --conventional-commits=false"
   }
 }
