@@ -7,18 +7,39 @@ const Readable = require('stream').Readable;
 
 const BemCell = require('@bem/sdk.cell');
 const bemConfig = require('@bem/sdk.config');
-const walk = require('@bem/sdk.walk');
 const File = require('vinyl');
-const toArray = require('stream-to-array');
 const read = require('gulp-read');
-const bubbleStreamError = require('bubble-stream-error');
 
-const deps = require('@bem/sdk.deps');
+const introspectFs = require('./introspect-fs');
+const buildBemGraph = require('./build-bem-graph');
+const resolveDeps = require('./resolve-deps');
+const filesToStream = require('./files-to-stream');
 
 module.exports = src;
 
 src.filesToStream = filesToStream;
 src.harvest = harvest;
+
+const declToEntities = (decl, tech) => {
+    return decl.map(entity => {
+        var e = entity.valueOf();
+
+        entity = typeof e === 'object' ? e : entity;
+
+        return Object.assign({}, entity, { tech });
+    }).map(BemCell.create);
+};
+
+async function _getBundleInfo(sources, decl, tech, options) {
+    const config = options.config || bemConfig();
+
+    // Получаем слепок файловой структуры с уровней
+    const introspection = await introspectFs(sources, config);
+    const graph = options.skipResolvingDependencies ? null : await buildBemGraph(introspection, sources)
+    const fulldecl = options.skipResolvingDependencies ? declToEntities(decl, tech) : resolveDeps(decl, graph, tech);
+
+    return { introspection, graph, fulldecl };
+}
 
 /**
  * Функция для получения файлов по декларации.
@@ -50,55 +71,17 @@ function src(sources, decl, tech, options) {
     options || (options = {});
     options.techMap || (options.techMap = {});
 
-    const config = options.config || bemConfig();
-
     const techMap = Object.assign({}, options.techMap);
     Object.keys(techMap)
         .filter(t => !Array.isArray(techMap[t]))
         .forEach(t => { techMap[t] = [techMap[t]]; });
 
-    // Получаем слепок файловой структуры с уровней
-    const introspectionP = Promise.resolve(config.levelMap ? config.levelMap() : {})
-        .then(levelMap => {
-            const intro = walk(sources, {levels: levelMap});
-
-            let hasSomeData = false;
-            intro.on('data', () => { hasSomeData = true; });
-            return new Promise((resolve, reject) => {
-                setTimeout(() => hasSomeData ||
-                    reject('Looks like there are no files. ' +
-                        'See also https://github.com/bem-sdk/bem-walk/issues/76'), 1000);
-                toArray(intro).then(resolve).catch(reject);
-            });
-        });
-
-    // Получаем и исполняем содержимое файлов ?.deps.js (получаем набор объектов deps)
-    const depsData = options.skipResolvingDependencies ? null : introspectionP
-        .then(files => files
-            // Получаем deps.js
-            .filter(f => f.tech === 'deps.js')
-            // Сортируем по уровням
-            .sort((f1, f2) => (sources.indexOf(f1.level) - sources.indexOf(f2.level))))
-        // Читаем и исполняем
-        .then(deps.read())
-        .then(deps.parse());
-
-    // Получаем граф с помощью bem-deps
-    const graphP = options.skipResolvingDependencies ? null : depsData.then(deps.buildGraph);
-
-    // Раскрываем декларацию с помощью графа
-    const filedeclP = (options.skipResolvingDependencies
-        ? Promise.resolve(decl.map(entity => {
-            var e = entity.valueOf();
-            entity = typeof e === 'object' ? e : entity;
-            return Object.assign({}, entity, { tech });
-        }))
-        : graphP.then(graph => graph.dependenciesOf(decl, tech)))
-            .then(entities => entities.map(BemCell.create));
+    const srcP = _getBundleInfo(sources, decl, tech, options);
 
     if (options.deps) {
         const stream = new Readable({objectMode: true, read() {}});
-        filedeclP.then(fulldecl => {
+
+        srcP.then(({ fulldecl }) => {
             const f = v => {
                 const res = {};
                 v.tech && (res.tech = v.tech);
@@ -116,93 +99,18 @@ function src(sources, decl, tech, options) {
             stream.push(null);
         })
         .catch(console.error);
+
         return stream;
     }
 
     // Формируем упорядоченный список файлов по раскрытой декларации и интроспекции
-    const orderedFilesPromise = Promise.all([introspectionP, filedeclP])
-        .then(data => {
-            const introspection = data[0];
-            const filedecl = data[1];
-
-            // Преобразуем технологии зависимостей в декларации в технологии файловой системы
-            return harvest({introspection, levels: sources, decl: filedecl, techMap});
-        });
+    const orderedFilesPromise = srcP.then(({ introspection, fulldecl }) => {
+        // Преобразуем технологии зависимостей в декларации в технологии файловой системы
+        return harvest({introspection, levels: sources, decl: fulldecl, techMap});
+    });
 
     // Читаем файлы из списка в поток
     return filesToStream(orderedFilesPromise, options);
-}
-
-/**
- * @param {BemFile[]|Promise<BemFile[]>} filesPromise - result of previous step © cap obv
- * @param {Object} options - see src options
- * @returns {Stream<Vinyl>}
- */
-function filesToStream(filesPromise, options) {
-    let files = null, i;
-    const stream = new Readable({
-        objectMode: true,
-        read() {
-            if (files) {
-                return tryread(this);
-            }
-
-            Promise.resolve(filesPromise).then(files_ => {
-                i = 0;
-                files = files_;
-                tryread(this);
-            });
-
-            function tryread(self) {
-                try {
-                    _read.call(self);
-                } catch (e) {
-                    self.emit('error', e);
-                    self.push(null);
-                }
-            }
-        }
-    });
-
-    function _read() {
-        if (!files.length) {
-            return this.push(null);
-        }
-
-        for (; i < files.length; ) { // eslint-disable-line
-            const file = files[i++];
-            const vf = new File({
-                name: '',
-                base: file.level,
-                path: file.path,
-                contents: null
-            });
-
-            vf.name = path.basename(file.path).split('.')[0];
-            vf.level = file.level;
-            vf.cell = file.cell;
-            vf.entity = file.entity;
-            vf.layer = file.layer;
-            vf.tech = file.tech;
-
-            if (this.push(vf) === false) { return; }
-        }
-        this.push(null);
-    }
-
-    options = Object.assign({
-        read: true
-    }, options);
-
-    let result = stream;
-
-    if (options.read) {
-        const reader = read();
-        bubbleStreamError(stream, reader);
-        result = stream.pipe(reader);
-    }
-
-    return result;
 }
 
 /**
