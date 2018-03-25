@@ -10,7 +10,7 @@ const bemConfig = require('@bem/sdk.config');
 const File = require('vinyl');
 const read = require('gulp-read');
 
-const introspectFs = require('./introspect-fs');
+const introspectLevels = require('./introspect-levels');
 const buildBemGraph = require('./build-bem-graph');
 const resolveDeps = require('./resolve-deps');
 const filesToStream = require('./files-to-stream');
@@ -34,11 +34,18 @@ async function _getBundleInfo(sources, decl, tech, options) {
     const config = options.config || bemConfig();
 
     // Получаем слепок файловой структуры с уровней
-    const introspection = await introspectFs(sources, config);
-    const graph = options.skipResolvingDependencies ? null : await buildBemGraph(introspection, sources)
-    const fulldecl = options.skipResolvingDependencies ? declToEntities(decl, tech) : resolveDeps(decl, graph, tech);
+    const introspection = await introspectLevels(sources, config);
 
-    return { introspection, graph, fulldecl };
+    if (options.skipResolvingDependencies) {
+        const fulldecl = declToEntities(decl, tech);
+
+        return { introspection, fulldecl };
+    }
+
+    const graph = await buildBemGraph(introspection);
+    const fulldecl = resolveDeps(decl, graph, tech);
+
+    return { introspection, fulldecl };
 }
 
 /**
@@ -140,7 +147,8 @@ function harvest(opts) {
     }, {});
 
     const res = [], depTechForFile = {};
-    for (const file of opts.introspection) {
+
+    for (const file of opts.introspection.files()) {
         if (file.tech && !fileTechToDep[file.tech] && !techMap[file.tech]) {
             techMap[file.tech] = [file.tech];
             fileTechToDep[file.tech] = [file.tech];
