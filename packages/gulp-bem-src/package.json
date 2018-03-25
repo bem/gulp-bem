@@ -30,7 +30,6 @@
   },
   "devDependencies": {
     "@bem/sdk.naming.entity.parse": "^0.2.4",
-    "@bem/sdk.naming.presets": "^0.0.7",
-    "stream-to-array": "^2.3.0"
+    "@bem/sdk.naming.presets": "^0.0.7"
   }
 }
