@@ -18,14 +18,5 @@ module.exports = async (levels, bemConfig) => {
     const levelMap = await Promise.resolve(bemConfig.levelMap ? bemConfig.levelMap() : {});
     const introspectionStream = walk(levels, { levels: levelMap });
 
-    let hasSomeData = false;
-    introspectionStream.on('data', () => { hasSomeData = true; });
-
-    return new Promise((resolve, reject) => {
-        setTimeout(() => hasSomeData ||
-            reject('Looks like there are no files. ' +
-                 'See also https://github.com/bem-sdk/bem-walk/issues/76'), 1000);
-
-        streamToArray(introspectionStream).then(resolve).catch(reject);
-     });
+    return streamToArray(introspectionStream);
 };
