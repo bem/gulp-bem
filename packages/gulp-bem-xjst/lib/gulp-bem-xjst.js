@@ -115,7 +115,7 @@ module.exports.toHtml = function(templatesStream) {
                     file.data || (file.data = _eval(String(file.contents)));
 
                     var html = tryCatch(function () {
-                        return file.data.apply(bemjsonFile.data);
+                        return file.data.bemhtml.apply(bemjsonFile.data);
                     }, function (err) {
                         throw new Error('BEMHTML error: ' + err);
                     });
