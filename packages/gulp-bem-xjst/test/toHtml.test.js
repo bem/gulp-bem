@@ -5,7 +5,7 @@ var expect = require('expect.js');
 var File = require('vinyl');
 var intoStream = require('into-stream');
 
-describe.skip('gulp-bem-xjst (to-html)', function () {
+describe('gulp-bem-xjst (to-html)', function () {
     it('outputs html', function (done) {
         var bemhtmlStream = lib.bemhtml();
 
