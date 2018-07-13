@@ -34,7 +34,7 @@ describe('gulp-bem-xjst', function () {
         it('outputs bemhtml templates compiler', function () {
             var bemhtml = _eval(vinylFile.contents.toString());
 
-            expect(bemhtml.bemhtml.apply({block: 'page'})).to.be.equal('<h1 class="page">Hello, world!</h1>');
+            expect(bemhtml.BEMHTML.apply({block: 'page'})).to.be.equal('<h1 class="page">Hello, world!</h1>');
         });
     });
 
