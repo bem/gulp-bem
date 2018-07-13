@@ -113,9 +113,10 @@ module.exports.toHtml = function(templatesStream) {
 
                 templatesVinyls.forEach(function(file) {
                     file.data || (file.data = _eval(String(file.contents)));
+                    var BEMHTML = file.data.BEMHTML || file.data[Object.keys(file.data)[0]];
 
                     var html = tryCatch(function () {
-                        return file.data.bemhtml.apply(bemjsonFile.data);
+                        return BEMHTML.apply(bemjsonFile.data);
                     }, function (err) {
                         throw new Error('BEMHTML error: ' + err);
                     });
