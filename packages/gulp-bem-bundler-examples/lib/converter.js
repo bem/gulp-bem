@@ -12,15 +12,14 @@ class Converter {
         this._bundles = {};
     }
 
-    appendExample(example, cb) {
+    appendExample(example) {
         const blockName = utils.getBlockName(example);
         const exampleRelativePath = utils.pathRelativeToRoot(example);
 
-        utils.readdir(example.path)
+        return utils.readdir(example.path)
             .then(this._groupExampleContents)
             .then(this._bundlesFromGroupedContents.bind(this))
-            .then(this._cacheBundles.bind(this, blockName, exampleRelativePath))
-            .done(cb);
+            .then(this._cacheBundles.bind(this, blockName, exampleRelativePath));
     }
 
     getResults() {
