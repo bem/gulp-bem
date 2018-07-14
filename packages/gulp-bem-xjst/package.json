@@ -29,16 +29,16 @@
     "Alexey Yaroshevich <zxqfox@gmail.com>"
   ],
   "dependencies": {
-    "bem-xjst": "^8.4.0",
-    "is-stream": "^1.1.0",
-    "node-eval": "^1.1.0",
-    "plugin-error": "^0.1.2",
-    "stream-to-array": "^2.3.0",
-    "through2": "^2.0.3",
-    "vinyl": "^2.0.1"
+    "bem-xjst": "8.9.3",
+    "is-stream": "1.1.0",
+    "node-eval": "2.0.0",
+    "plugin-error": "1.0.1",
+    "stream-to-array": "2.3.0",
+    "through2": "2.0.3",
+    "vinyl": "2.2.0"
   },
   "devDependencies": {
-    "expect.js": "^0.3.1",
-    "into-stream": "^3.1.0"
+    "expect.js": "0.3.1",
+    "into-stream": "3.1.0"
   }
 }

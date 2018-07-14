@@ -5,7 +5,7 @@
   "homepage": "https://github.com/gulp-bem/gulp-bem#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gulp-bem/gulp-bem.git"
+    "url": "git+https://github.com/bem/gulp-bem.git"
   },
   "keywords": [
     "gulp",
@@ -24,16 +24,15 @@
     "node": "8"
   },
   "devDependencies": {
-    "lerna": "^2.9.0",
-    "chai": "^4.1.2",
-    "mocha": "^5.0.5",
-    "sinon-chai": "^3.0.0",
-    "eslint": "^4.19.1",
-    "eslint-config-pedant": "^1.0.0",
-    "mock-fs": "^4.4.2",
-    "nyc": "^11.6.0",
-    "sinon": "^5.0.0",
-    "chai-as-promised": "^7.1.1"
+    "chai": "4.1.2",
+    "chai-as-promised": "7.1.1",
+    "eslint": "5.1.0",
+    "eslint-config-pedant": "1.0.0",
+    "mocha": "5.2.0",
+    "mock-fs": "4.5.0",
+    "nyc": "12.0.2",
+    "sinon": "6.1.3",
+    "sinon-chai": "3.2.0"
   },
   "scripts": {
     "lint": "eslint .",

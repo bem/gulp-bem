@@ -2,7 +2,12 @@
   "name": "gulp-bem-bundler-examples",
   "version": "0.0.1",
   "description": "Gulp plugin for transforing examples to bundles",
-  "keywords": ["gulp", "bem", "examples", "bundler"],
+  "keywords": [
+    "gulp",
+    "bem",
+    "examples",
+    "bundler"
+  ],
   "author": "Ilia Isupov <ilia.isupov@gmail.com>",
   "maintainers": [
     "Ilia Isupov <ilia.isupov@gmail.com>",
@@ -18,13 +23,13 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@bem/gulp": "0.0.5",
-    "debug": "^2.2.0",
-    "lodash": "^4.7.0",
-    "q": "^1.4.1",
-    "streaming-json-stringify": "^3.1.0",
-    "through2": "^2.0.1",
-    "vinyl": "^1.1.1",
-    "vinyl-fs": "^2.4.3"
+    "@bem/gulp": "0.0.8",
+    "debug": "3.1.0",
+    "lodash": "4.17.10",
+    "q": "1.5.1",
+    "streaming-json-stringify": "3.1.0",
+    "through2": "2.0.3",
+    "vinyl": "2.2.0",
+    "vinyl-fs": "3.0.3"
   }
 }

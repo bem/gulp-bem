@@ -22,15 +22,15 @@
     "lib"
   ],
   "dependencies": {
-    "@bem/sdk.bundle": "^0.2.6",
-    "gulp-bem-src": "^0.1.1",
-    "merge2": "^1.2.0",
-    "mz": "^2.7.0",
-    "node-eval": "^1.1.1",
-    "through2": "^2.0.3",
-    "vinyl": "^2.1.0"
+    "@bem/sdk.bundle": "0.2.9",
+    "gulp-bem-src": "0.1.3",
+    "merge2": "1.2.2",
+    "mz": "2.7.0",
+    "node-eval": "2.0.0",
+    "through2": "2.0.3",
+    "vinyl": "2.2.0"
   },
   "devDependencies": {
-    "gulp-concat": "^2.6.0"
+    "gulp-concat": "2.6.1"
   }
 }
