@@ -6,7 +6,7 @@
   "author": "Vasiliy Loginevskiy <yeti.or@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": ">= 4"
+    "node": ">= 8"
   },
   "repository": {
     "type": "git",
