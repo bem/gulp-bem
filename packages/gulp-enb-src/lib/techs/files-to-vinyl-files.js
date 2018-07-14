@@ -1,8 +1,8 @@
 'use strict';
 
 const fs = require('fs');
+const { promisify } = require('util');
 
-const promisify = require('es6-promisify');
 const enb = require('enb');
 
 const writeFile = promisify(fs.writeFile);

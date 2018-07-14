@@ -4,8 +4,8 @@ const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { promisify } = require('util');
 
-const promisify = require('es6-promisify');
 const enb = require('enb');
 const mkdirp = promisify(require('mkdirp'));
 const writeFile = promisify(fs.writeFile);
