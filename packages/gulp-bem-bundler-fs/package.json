@@ -19,8 +19,8 @@
     "node": ">= 8.0"
   },
   "dependencies": {
-    "@bem/bundle": "0.2.3",
-    "bem-decl": "0.3.0",
+    "@bem/sdk.bundle": "0.2.9",
+    "@bem/sdk.decl": "0.3.4",
     "globby": "8.0.1",
     "mz": "2.7.0",
     "node-eval": "2.0.0"
