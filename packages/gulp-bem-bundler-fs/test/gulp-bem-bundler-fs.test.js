@@ -8,9 +8,6 @@ const bundler = require('..');
 describe('gulp-bem-bundler-fs', () => {
     let bundles;
     before(async () => {
-        console.log('FS:');
-        console.log(execSync('tree ' + __dirname + '/fixtures/bundles') + '');
-
         bundles = await toArray(bundler(__dirname + '/fixtures/bundles/*', { levels: ['blocks'] }));
     });
 
