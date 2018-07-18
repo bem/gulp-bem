@@ -18,8 +18,8 @@
     "node": ">= 8.0"
   },
   "dependencies": {
-    "@bem/bundle": "0.2.3",
-    "bem-decl": "0.3.0",
+    "@bem/sdk.bundle": "0.2.9",
+    "@bem/sdk.decl": "0.3.4",
     "through2": "2.0.3"
   }
 }
