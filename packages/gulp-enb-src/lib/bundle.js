@@ -13,6 +13,8 @@ const writeFile = promisify(fs.writeFile);
 const generateConfig = require('./generate-config');
 const getConfigDir = require('./config-dir').get;
 
+// const sdkDecl = require('@bem/sdk.decl');
+
 exports.generateBundleName = (options) => {
     const key = JSON.stringify(options);
 
@@ -46,7 +48,8 @@ exports.create = (options) => {
         .then(() => {
             const declPath = path.join(bundle.path, `${bundle.name}.bemdecl.js`);
 
-            return writeFile(declPath, `exports.deps = ${JSON.stringify(decl)};`);
+            // should be: sdkDecl.stringify(decl, { format: 'enb', exportType: 'commonjs' });
+            return writeFile(declPath, `exports.deps = ${JSON.stringify(decl.map(c => c.entity || c))};`);
         })
         .then(() => bundle);
 };

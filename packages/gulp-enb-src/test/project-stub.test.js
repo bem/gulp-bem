@@ -2,9 +2,10 @@
 
 const path = require('path');
 
-const bemjsonToDecl = require('bemjson-to-decl').convert;
-const bemDecl = require('bem-decl');
-const bemDeclConvert = require('bem-decl/lib/convert');
+const bemjsonToDecl = require('@bem/sdk.bemjson-to-decl').convert;
+// const bemDecl = require('@bem/sdk.decl');
+const BemCell = require('@bem/sdk.cell');
+// const bemDeclConvert = require('@bem/sdk.decl/lib/formats/enb/normalize');
 const toArray = require('stream-to-array');
 
 const assert = require('chai').assert;
@@ -18,7 +19,9 @@ const bundleName = 'index';
 const bundleDir = path.join(projectStubDir, 'desktop.bundles', 'index');
 const bemjsonPath = path.join(bundleDir, `${bundleName}.bemjson.js`);
 const bemjson = require(bemjsonPath);
-const decl = bemDeclConvert(bemDecl.normalize(bemjsonToDecl(bemjson)), { format: 'enb' });
+// console.log({ fixturesDir, projectStubDir });
+
+const decl = bemjsonToDecl(bemjson).map(BemCell.create);
 const levels = [
     { path: 'libs/bem-core/common.blocks', check: false },
     { path: 'libs/bem-core/desktop.blocks', check: false },
@@ -39,7 +42,8 @@ const jsPaths = require(`${fixturesDir}/project-stub-files`).js.map(filename => 
 describe('gulp-enb-src', () => {
     it('should scan `project-stub`', async () => {
         const stream = src({
-            levels, decl,
+            levels,
+            decl,
             tech: 'js',
             extensions: ['.vanilla.js', '.browser.js', '.js'],
             root: projectStubDir,
