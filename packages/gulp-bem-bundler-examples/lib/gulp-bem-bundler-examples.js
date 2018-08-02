@@ -1,20 +1,24 @@
 'use strict';
 
 const through2 = require('through2');
+const debug = require('debug')('gulp-bem-bundler-examples');
+
 const Converter = require('./converter');
-const debug = require('debug')('index');
 
 module.exports = (levels) => {
     const converter = new Converter(levels);
 
-    return through2.obj((vinyl, enc, callback) => {
-        converter.appendExample(vinyl, callback);
-    }, function(callback) {
-        var converted = converter.getResults();
+    return through2.obj(async (vinyl, _, next) => {
+        await converter.appendExample(vinyl);
+        next();
+    }, function(next) {
+        const converted = converter.getResults();
 
-        debug('flush');
         debug(converted);
-        converted.map(this.push.bind(this));
-        callback();
+
+        for (const example of converted) {
+            this.push(example);
+        }
+        next();
     });
 };

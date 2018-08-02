@@ -1,8 +1,8 @@
 'use strict';
 
 const thru = require('through2');
-const bemDecl = require('bem-decl');
-const BemBundle = require('@bem/bundle');
+const bemDecl = require('@bem/sdk.decl');
+const BemBundle = require('@bem/sdk.bundle');
 
 module.exports = function(opts) {
     opts = Object.assign({
@@ -10,18 +10,19 @@ module.exports = function(opts) {
         path: '.'
     }, opts);
 
-    return thru.obj(function(chunk, enc, cb) {
-        this.decls || (this.decls = []);
-        chunk.decl && this.decls.push(chunk.decl);
-        if (opts.mergeLevels) {
-            this.levels || (this.levels = []);
-            chunk.levels && this.levels.push(chunk.levels);
+    const decls = [];
+    const mergedLevels = [];
+    return thru.obj(
+        (chunk, _, cb) => {
+            chunk.decl && decls.push(chunk.decl);
+            opts.mergeLevels && chunk.levels && mergedLevels.push(chunk.levels);
+            cb();
+        },
+        function(cb) {
+            const decl = bemDecl.merge.apply(null, decls);
+            const levels = opts.mergeLevels ? [].concat.apply([], mergedLevels) : [];
+            this.push(new BemBundle(Object.assign({}, opts, { decl, levels })));
+            cb();
         }
-        cb(null);
-    }, function(cb) {
-        const decl = bemDecl.merge.apply(null, this.decls);
-        const levels = opts.mergeLevels ? [].concat.apply([], this.levels) : [];
-        this.push(new BemBundle(Object.assign({}, opts, { decl, levels })));
-        cb();
-    });
+    );
 };

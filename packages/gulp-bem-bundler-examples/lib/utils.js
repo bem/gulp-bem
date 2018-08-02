@@ -1,8 +1,8 @@
 'use strict';
 
 const path = require('path');
-const q = require('q');
 const fs = require('fs');
+const { promisify } = require('util');
 
 exports.getBlockName = function (vinyl) {
     return path.basename(vinyl.path).split('.')[0];
@@ -16,4 +16,4 @@ exports.pathRelativeToRoot = function(vinyl) {
     return vinyl.path.replace(process.cwd(), '');
 };
 
-exports.readdir = q.denodeify(fs.readdir);
+exports.readdir = promisify(fs.readdir);

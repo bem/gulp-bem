@@ -20,14 +20,17 @@
   "files": [
     "lib"
   ],
+  "engines": {
+    "node": ">= 8.0"
+  },
   "devDependencies": {
-    "stream-from-array": "^1.0.0"
+    "stream-from-array": "1.0.0"
   },
   "dependencies": {
-    "gulp-util": "^3.0.7",
-    "lodash": "^4.16.2",
+    "gulp-util": "3.0.8",
+    "lodash": "4.17.10",
     "require-async": "0.0.4",
-    "through2": "^2.0.1",
-    "vow": "^0.4.12"
+    "through2": "2.0.3",
+    "vow": "0.4.17"
   }
 }

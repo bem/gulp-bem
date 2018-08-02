@@ -15,11 +15,11 @@
     "lib"
   ],
   "engines": {
-    "node": ">= 4.0"
+    "node": ">= 8.0"
   },
   "dependencies": {
-    "@bem/bundle": "^0.2.2",
-    "bem-decl": "^0.3.0",
-    "through2": "^2.0.3"
+    "@bem/sdk.bundle": "0.2.9",
+    "@bem/sdk.decl": "0.3.4",
+    "through2": "2.0.3"
   }
 }

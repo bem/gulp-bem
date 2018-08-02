@@ -16,13 +16,13 @@
     "lib"
   ],
   "engines": {
-    "node": ">= 4.0"
+    "node": ">= 8.0"
   },
   "dependencies": {
-    "@bem/bundle": "^0.2.0",
-    "bem-decl": "^0.3.0",
-    "globby": "^6.0.0",
-    "mz": "^2.4.0",
-    "node-eval": "^1.0.3"
+    "@bem/sdk.bundle": "0.2.9",
+    "@bem/sdk.decl": "0.3.4",
+    "globby": "8.0.1",
+    "mz": "2.7.0",
+    "node-eval": "2.0.0"
   }
 }

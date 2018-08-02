@@ -78,6 +78,7 @@ function src(sources, decl, tech, options) {
 
     const srcP = _getBundleInfo(sources, decl, tech, options);
 
+    // Если указан флаг deps — возвращаем поток с раскрытими зависимостями в виде файлов в формате deps.js
     if (options.deps) {
         const stream = new Readable({objectMode: true, read() {}});
 

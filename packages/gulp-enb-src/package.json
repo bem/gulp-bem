@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Helper to get sources with ENB",
   "license": "MIT",
-  "repository": "gulp-bem/gulp-enb-src",
+  "repository": "bem/gulp-bem",
   "author": "Andrew Abramov <mail@blond.im> (github.com/blond)",
   "keywords": [
     "gulp",
@@ -23,15 +23,14 @@
     "lib/**"
   ],
   "engines": {
-    "node": ">= 4.0"
+    "node": ">= 8.0"
   },
   "dependencies": {
     "array-includes": "3.0.3",
     "enb": "1.5.1",
     "enb-bem-techs": "2.2.2",
-    "es6-promisify": "5.0.0",
     "mkdirp": "0.5.1",
-    "vinyl": "2.0.2"
+    "vinyl": "2.2.0"
   },
   "devDependencies": {
     "bem-project-stub": "git://github.com/bem/project-stub.git#v1.6.0"

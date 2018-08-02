@@ -16,7 +16,7 @@ module.exports = async (levels, bemConfig) => {
     assert(Array.isArray(levels) && levels.length, 'Levels required to get some files');
 
     const levelMap = await Promise.resolve(bemConfig.levelMap ? bemConfig.levelMap() : {});
-    const introspectionStream = walk(levels, { levels: levelMap });
+    const introspectionStream = walk(levels, { defaults: { naming: 'legacy' }, levels: levelMap });
 
     return streamToArray(introspectionStream);
 };

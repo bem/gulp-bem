@@ -3,8 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 const process = require('process');
+const { promisify } = require('util');
 
-const promisify = require('es6-promisify');
 const mkdirp = promisify(require('mkdirp'));
 const readdir = promisify(fs.readdir);
 
