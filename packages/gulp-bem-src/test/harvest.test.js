@@ -3,6 +3,7 @@ const path = require('path');
 const parseEntity = require('@bem/sdk.naming.entity.parse')(require('@bem/sdk.naming.presets/origin'));
 const { assert } = require('chai');
 const lib = require('..');
+const Introspection = require('../lib/introspect-levels/introspection');
 
 describe('harvest', () => {
     it('should filter introspection by entity and tech', () => {
@@ -96,7 +97,17 @@ describe('harvest', () => {
 // {entity: {block: 'button'}, tech: 'css'}
 
 function checkHarvest(opts) {
-    opts.introspection = opts.files.map(makeFileEntity);
+    const files = opts.files.map(makeFileEntity);
+    const entityMap = new Map();
+
+    for (const file of files) {
+        const id = file.entity.id;
+        const entityFiles = entityMap.has(id) ? entityMap.get(id) : entityMap.set(id, new Set()).get(id);
+
+        entityFiles.add(file);
+    }
+
+    opts.introspection = new Introspection(['<level-path>'], [entityMap]);
     opts.result = opts.result.map(makeFileEntity);
     opts.decl = opts.decl.map(makeEntity);
 
