@@ -125,13 +125,10 @@ module.exports.toHtml = function(templatesStream) {
                         throw new Error('Incorrect html result.');
                     }
 
-                    var name = path.basename(bemjsonFile.path).split('.')[0];
-                    var newFile = new File({
-                        path: name + (n-- || '') + '.html',
-                        contents: new Buffer(html)
-                    });
+                    bemjsonFile.path = bemjsonFile.path.split('.')[0] + (n-- || '') + '.html';
+                    bemjsonFile.contents = new Buffer(html);
 
-                    _this.push(newFile);
+                    _this.push(bemjsonFile);
                 });
 
                 callback();
